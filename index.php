@@ -9,11 +9,11 @@
         <h4>Selecione a materia</h4>
         <nav>
             <ul>
-                <li>Linux</li>
-                <li>PHP</li>
-                <li>CSS</li>
-                <li>HTML</li>
-                <li>JAVASCRIPT</li>
+                <li><a href="pergunta.php">Linux</a></li>
+                <li><a href="pergunta.php">PHP</a></li>
+                <li><a href="pergunta.php">CSS</a></li>
+                <li><a href="pergunta.php">HTML</a></li>
+                <li><a href="pergunta.php">JAVASCRIPT</a></li>
             </ul>
         </nav>
     </body>
