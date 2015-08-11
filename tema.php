@@ -5,7 +5,7 @@
         <title>Login</title>
     </head>
     <body>
-        <h4>Cadastro de perguntas e respostas</h4>
+        <h4>Escolha um tema:</h4>
         <menu>
             <ul>
                 <a href="question.php"><li>Linux</li></a>
