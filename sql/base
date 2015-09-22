@@ -1,0 +1,35 @@
+﻿/*
+ * Tema das perguntas
+ */
+CREATE TABLE wquiz_theme (
+	theme_id serial primary key,		-- A identificação do tema
+	theme_description varchar		-- Descrição do tema
+);
+COMMENT ON COLUMN wquiz_theme.theme_id 		IS 'A identificação do tema';
+COMMENT ON COLUMN wquiz_theme.theme_description IS 'Descrição do tema';
+
+/*
+ * Pergunta
+ */
+CREATE TABLE wquiz_question (
+	question_id serial primary key,				-- A identificação das perguntas
+	question_theme int references wquiz_theme(theme_id),	-- Relacionamento da questão com o tema
+	question_title varchar					-- Descrição da pergunta
+);
+COMMENT ON COLUMN wquiz_question.question_id 	IS 'A identificação das perguntas';
+COMMENT ON COLUMN wquiz_question.question_theme IS 'Relacionamento da questão com o tema';
+COMMENT ON COLUMN wquiz_question.question_title IS 'Descrição da pergunta';
+
+/*
+ * Respostas
+ */
+CREATE TABLE wquiz_answer (
+	answer_id serial primary key,					-- A identificação das respostas
+	answer_question int references wquiz_question(question_id),	-- Relacionamento com a pergunta
+	answer_description varchar,					-- Descrição da reposta
+	answer_correct boolean not null default false			-- Define se a resposta está correta
+);
+COMMENT ON COLUMN wquiz_answer.answer_id 		IS 'A identificação das respostas';
+COMMENT ON COLUMN wquiz_answer.answer_question 		IS 'Relacionamento com a pergunta';
+COMMENT ON COLUMN wquiz_answer.answer_description 	IS 'Descrição da reposta';
+COMMENT ON COLUMN wquiz_answer.answer_correct 		IS 'Define se a resposta está correta';

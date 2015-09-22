@@ -1,0 +1,32 @@
+﻿INSERT INTO wquiz_theme(theme_description) VALUES 
+	('PHP'),
+	('SQL'),
+	('LINUX');
+
+INSERT INTO wquiz_question(question_theme, question_title) VALUES
+	(1, 'O que é PHP?'),
+	(2, 'O que é SQL?'),
+	(3, 'O que é LINUX?');
+
+INSERT INTO wquiz_answer(answer_question, answer_description, answer_correct) VALUES 
+	(1, 'Pura humilhação programada', false),
+	(1, 'Processamento de HiPer texto', false),
+	(1, 'Um acrônimo recursivo para PHP: Hypertext Preprocessor', true),
+	(1, 'Padrão homogêneo de Programação', false);
+
+-- Lista de temas disponiveis
+SELECT * from wquiz_theme;
+
+-- Lista de perguntas relacionadas ao tema
+SELECT *
+from wquiz_question
+join wquiz_theme
+on(question_theme = theme_id)
+where question_theme = 1;
+
+-- Lista de respostas relacionadas a pergunta
+SELECT *
+from wquiz_question
+join wquiz_answer
+on(answer_question = question_id)
+where answer_question = 1;
