@@ -1,0 +1,64 @@
+.demo-card-wide.mdl-card {
+    width: 30%;
+    float: left;
+    margin: 5px;
+}
+
+.demo-card-wide > .mdl-card__title {
+    color: #fff;
+    height: 176px;
+}
+
+.demo-card-wide #capitalQuiz {
+    color: #fff;
+    height: 50px;
+    background-color: #8e44ad;
+}
+
+.demo-card-wide #climaQuiz {
+    color: #fff;
+    height: 50px;
+    background-color: #3498db;
+}
+
+.demo-card-wide #extremoQuiz {
+    color: #fff;
+    height: 50px;
+    background-color: #f1c40f;
+}
+
+.demo-card-wide #relevoQuiz {
+    color: #fff;
+    height: 50px;
+    background-color: #c0392b;
+}
+
+.demo-card-wide #vegetacaoQuiz {
+    color: #fff;
+    height: 50px;
+    background-color: #2ecc71;
+}
+
+.demo-card-wide #capital{
+    background-color: #8e44ad;
+}
+
+.demo-card-wide #clima{
+    background-color: #3498db;
+}
+
+.demo-card-wide #extremo{
+    background-color: #f1c40f;
+}
+
+.demo-card-wide #relevo{
+    background-color: #c0392b;
+}
+
+.demo-card-wide #vegetacao{
+    background-color: #2ecc71;
+}
+
+.demo-card-wide > .mdl-card__menu {
+    color: #fff;
+}
