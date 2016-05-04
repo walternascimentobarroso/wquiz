@@ -4,7 +4,7 @@
 question(Id,Question) :- 
 	clima(Id,Question,_).
 
-answer(Id,Answer) :- clima(Id,_,Answer).
+answer(Id,Answer) :- ifThenElse(clima(Id,_,Answer),writeln('1'),writeln('0')).
 
 quizItem(Id) :-
 	question(Id,Question),

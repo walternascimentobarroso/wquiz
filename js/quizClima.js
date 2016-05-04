@@ -1,45 +1,62 @@
 //ao comecar faz uma busca ajax pela questao;
 //ao responder faz um verificação ajax pela sucesso da resposta
 
-function ajax(fn, type) {
+var number = retornaAleatorio();
+var i = 0;
+var pts = 0;
+
+function ajax(fn, dados) {
     $.ajax({
         url: 'http://localhost:8080/Programas/index.php',
         method: "POST",
-        data: type,
+        data: dados,
         success: fn
     });
 }
 
-ajax(function (retorno) {
+function questao(retorno) {
     $('#questao').html(retorno);
-});
+}
+function resposta(retorno) {
+    retorno == 1 ? pts++ : pts;
+}
+
+
+
+ajax(questao, {question: number[i]});
+
 
 
 $('.nextButton').click(function () {
-    console.log($('#resposta').val());
+    if (Number($('.currentQuestion').html()) === Number($('.totalQuestion').html()) - 1) {
+        $('.fimButton').removeClass('hidden');
+        $('.nextButton').addClass('hidden');
+    }
+    ajax(resposta, {answer: $('#resposta').val(), idanswer: number[i]});
     $('.currentQuestion').html(Number($('.currentQuestion').html()) + 1);
-    ajax(function (retorno) {
-        $('#questao').html(retorno);
-    });
+    i++;
+    ajax(questao, {question: number[i]});
+
 });
 
-//numero randomico
-var maximo = 5;
-var resultados = 5;
+function retornaAleatorio() {
+    //numero randomico
+    var maximo = 5;
 
-var i, arr = [];
-for (i = 0; i < maximo; i++) {
-    arr[i] = i + 1;
-}
+    var i, arr = [];
+    for (i = 0; i < maximo; i++) {
+        arr[i] = i + 1;
+    }
 
-var p, n, tmp;
-for (p = arr.length; p; ) {
-    n = Math.random() * p-- | 0;
-    tmp = arr[n];
-    arr[n] = arr[p];
-    arr[p] = tmp;
-}
-
-for (var i = 0; i < resultados; i++) {
-    console.log(arr[i]);
+    var p, n, tmp;
+    for (p = arr.length; p; ) {
+        n = Math.random() * p-- | 0;
+        tmp = arr[n];
+        arr[n] = arr[p];
+        arr[p] = tmp;
+    }
+    return arr;
+//    for (var i = 0; i < 5; i++) {
+//        console.log(arr[i]);
+//    }
 }
