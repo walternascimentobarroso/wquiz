@@ -7,7 +7,7 @@ var pts = 0;
 
 function ajax(fn, dados) {
     $.ajax({
-        url: 'http://localhost:8080/Programas/clima.php',
+        url: 'http://localhost:8080/Programas/relevo.php',
         method: "POST",
         data: dados,
         success: fn
