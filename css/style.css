@@ -62,3 +62,11 @@
 .demo-card-wide > .mdl-card__menu {
     color: #fff;
 }
+
+.fimQuestion {
+    background-color: rgba(0, 0, 255, 0.8);
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index: 1;
+}

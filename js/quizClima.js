@@ -27,7 +27,29 @@ ajax(questao, {question: number[i]});
 
 
 
-$('.nextButton').click(function () {
+$('.nextButton').click(avante);
+$('.fimButton').click(finalizar);
+
+$('#resposta').keypress(function (e) {
+    if (e.wich == 13 || e.keyCode == 13) {
+        if (Number($('.currentQuestion').html()) === Number($('.totalQuestion').html())) {
+            finalizar();
+        } else {
+            avante();
+        }
+    }
+});
+
+function finalizar() {
+    if (pts > 1) {
+        $('#pontos').html(pts + ' pontos');
+    } else {
+        $('#pontos').html(pts + ' ponto');
+    }
+    $('.fimQuestion').removeClass('hidden');
+}
+
+function avante() {
     if (Number($('.currentQuestion').html()) === Number($('.totalQuestion').html()) - 1) {
         $('.fimButton').removeClass('hidden');
         $('.nextButton').addClass('hidden');
@@ -36,8 +58,9 @@ $('.nextButton').click(function () {
     $('.currentQuestion').html(Number($('.currentQuestion').html()) + 1);
     i++;
     ajax(questao, {question: number[i]});
-
-});
+    $('#resposta').val('');
+    $('#resposta').focus();
+}
 
 function retornaAleatorio() {
     //numero randomico
