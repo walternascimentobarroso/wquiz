@@ -13,6 +13,9 @@ $('#vegetacoes').click(function () {
 $('#extremos').click(function () {
     window.location = 'quizExtremo.html';
 });
+$('#chatter').click(function () {
+    window.location = 'chatterbot.html';
+});
 
 // text = text.charAt(0).toUpperCase() + text.slice(1);
 // 'walter'.charAt(0).toUpperCase() + 'walter'.slice(1);
