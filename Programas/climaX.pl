@@ -1,3 +1,4 @@
+:- encoding(utf8).
 :- include(clima).
 :- include(engine).
 

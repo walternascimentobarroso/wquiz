@@ -1,19 +1,11 @@
 <?php
 
 if ($_POST['answer']) {
-    echo getAnswer($_POST['answer'], $_POST['idanswer']);
-} else if ($_POST['question']) {
-    echo getQuestion($_POST['question']);
+    echo getAnswer($_POST['answer']);
 }
 
-function getAnswer($answer, $idanswer) {
-    unicode_decode($answer);
-    $consulta = "swipl -s climaX.pl -g \"answer($idanswer,'$answer').\" -t halt.";
-    return `$consulta`;
-}
-
-function getQuestion($id) {
-    $consulta = "swipl -s climaX.pl -g \"clima($id).\" -t halt.";
+function getAnswer($answer) {
+    $consulta = "swipl -s conhecimentoX.pl -g \"chat('$answer').\" -t halt.";
     return saida($consulta);
 }
 

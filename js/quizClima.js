@@ -7,7 +7,7 @@ var pts = 0;
 
 function ajax(fn, dados) {
     $.ajax({
-        url: 'http://localhost:8080/Programas/clima.php',
+        url: '/Programas/clima.php',
         method: "POST",
         data: dados,
         success: fn
@@ -21,11 +21,7 @@ function resposta(retorno) {
     retorno == 1 ? pts++ : pts;
 }
 
-
-
 ajax(questao, {question: number[i]});
-
-
 
 $('.nextButton').click(avante);
 $('.fimButton').click(finalizar);
@@ -40,7 +36,8 @@ $('#resposta').keypress(function (e) {
     }
 });
 
-function finalizar() {
+function respostafim(retorno) {
+    retorno == 1 ? pts++ : pts;
     if (pts == 0) {
         $('.principal').html('Que pena');
         $('#pontos').html(pts + ' ponto');
@@ -51,6 +48,10 @@ function finalizar() {
         $('#pontos').html(pts + ' ponto');
     }
     $('.fimQuestion').removeClass('hidden');
+}
+
+function finalizar() {
+    ajax(respostafim, {answer: $('#resposta').val(), idanswer: number[i]});
 }
 
 function avante() {

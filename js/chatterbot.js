@@ -2,11 +2,17 @@ var $messages = $('.messages-content'),
         d, h, m,
         i = 0;
 
+function ajax(fn, dados) {
+    $.ajax({
+        url: 'http://siege.localhost/Programas/conhecimento.php',
+        method: "POST",
+        data: dados,
+        success: fn
+    });
+}
+
 $(window).load(function () {
     $messages.mCustomScrollbar();
-    setTimeout(function () {
-        fakeMessage();
-    }, 100);
 });
 
 function updateScrollbar() {
@@ -33,9 +39,7 @@ function insertMessage() {
     setDate();
     $('.message-input').val(null);
     updateScrollbar();
-    setTimeout(function () {
-        fakeMessage();
-    }, 1000 + (Math.random() * 20) * 100);
+    ajax(retorno, {answer: msg.toLowerCase()});
 }
 
 $('.message-submit').click(function () {
@@ -47,27 +51,9 @@ $(window).on('keydown', function (e) {
         insertMessage();
         return false;
     }
-})
+});
 
-var Fake = [
-    'Hi there, I\'m Fabio and you?',
-    'Nice to meet you',
-    'How are you?',
-    'Not too bad, thanks',
-    'What do you do?',
-    'That\'s awesome',
-    'Codepen is a nice place to stay',
-    'I think you\'re a nice person',
-    'Why do you think that?',
-    'Can you explain?',
-    'Anyway I\'ve gotta go now',
-    'It was a pleasure chat with you',
-    'Time to make a new codepen',
-    'Bye',
-    ':)'
-]
-
-function fakeMessage() {
+function retorno(retorno) {
     if ($('.message-input').val() != '') {
         return false;
     }
@@ -76,10 +62,8 @@ function fakeMessage() {
 
     setTimeout(function () {
         $('.message.loading').remove();
-        $('<div class="message new"><figure class="avatar"><img src="img/mapabrasil.png" /></figure>' + Fake[i] + '</div>').appendTo($('.mCSB_container')).addClass('new');
+        $('<div class="message new"><figure class="avatar"><img src="img/mapabrasil.png" /></figure>' + retorno + '</div>').appendTo($('.mCSB_container')).addClass('new');
         setDate();
         updateScrollbar();
-        i++;
-    }, 1000 + (Math.random() * 20) * 100);
-
+    }, 1000);
 }

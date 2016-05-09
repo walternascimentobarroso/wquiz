@@ -1,3 +1,4 @@
+:- encoding(utf8).
 :- include(extremo).
 :- include(engine).
 
