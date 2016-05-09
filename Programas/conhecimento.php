@@ -1,11 +1,15 @@
 <?php
 
+//var_dump($_POST);
+
 if ($_POST['answer']) {
     echo getAnswer($_POST['answer']);
 }
 
 function getAnswer($answer) {
+//    unicode_decode($answer);
     $consulta = "swipl -s conhecimentoX.pl -g \"chat('$answer').\" -t halt.";
+//    echo $consulta;
     return saida($consulta);
 }
 
