@@ -4,7 +4,7 @@ var $messages = $('.messages-content'),
 
 function ajax(fn, dados) {
     $.ajax({
-        url: 'http://siege.localhost/Programas/conhecimento.php',
+        url: '/Programas/conhecimento.php',
         method: "POST",
         data: dados,
         success: fn

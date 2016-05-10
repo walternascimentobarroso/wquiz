@@ -39,9 +39,9 @@ conhecimento('oi',
 	['Ola!',
  	 'Oi, Como vai você?']).
 
-conhecimento('como voce se chama?', ['Meu nome é Professor SIEGE.']).
+conhecimento('como voce se chama', ['Meu nome é Professor SIEGE.']).
 
-conhecimento('qual o seu nome?', ['Meu nome é Professor SIEGE.']).
+conhecimento('qual o seu nome', ['Meu nome é Professor SIEGE.']).
 
 conhecimento('tudo bem', 
 	['Tudo otimo!',
