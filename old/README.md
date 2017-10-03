@@ -1,3 +1,0 @@
-quiz
-====
-Templat do quiz
