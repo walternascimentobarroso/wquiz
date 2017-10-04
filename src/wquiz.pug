@@ -1,0 +1,69 @@
+doctype html
+html(lang='pt-br')
+  head
+    meta(charset='utf-8')
+    link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(name='msapplication-TileColor', content='#ffffff')
+    meta(name='theme-color', content='#ffffff')
+    title WQUIZ
+  body
+    header
+      nav
+        .nav-wrapper
+          ul#nav-mobile.left.hide-on-med-and-down
+            li
+              a(href='sass.html') Sass
+            li
+              a(href='badges.html') Components
+            li
+              a(href='collapsible.html') JavaScript
+          a.brand-logo.center(href='index.html') Logo
+          ul.right.hide-on-med-and-down
+            li
+              a(href='sass.html') Sass
+            li
+              a(href='badges.html') Components
+            li
+              a(href='collapsible.html') JavaScript
+    main.container.center-align
+      .row
+        .col.s12.m12
+          .card-panel.teal
+            span.white-text.left 1 / 25
+            span.white-text.right 12:00
+          .card.blue-grey.darken-1
+            .progress
+              .determinate(style='width: 70%')
+            .card-content.white-text
+              span.card-title Questão
+              p Respostas
+            .card-action
+              a.waves-effect.waves-light.btn.blue.darken-1(href='#') Anterior
+              a.waves-effect.waves-light.btn.blue.darken-3(href='#') Proxima
+              a.waves-effect.waves-light.btn.red(href='gameover.html') Finalizar
+    footer.page-footer
+      .container
+        .row
+          .col.l6.s12
+            h5.white-text Footer Content
+            p.grey-text.text-lighten-4 You can use rows and columns here to organize your footer content.
+          .col.l4.offset-l2.s12
+            h5.white-text Baixe
+            ul
+              li
+                a.grey-text.text-lighten-3(href='#!') Link 1
+              li
+                a.grey-text.text-lighten-3(href='#!') Link 2
+              li
+                a.grey-text.text-lighten-3(href='#!') Link 3
+              li
+                a.grey-text.text-lighten-3(href='#!') Link 4
+      .footer-copyright
+        .container
+          | © 2017 Copyright
+          a.grey-text.text-lighten-4.right(href='#!') Walter Nascimento Barroso
+    script(type='text/javascript', src='https://code.jquery.com/jquery-3.2.1.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js')
+    script(src='js/script.js')
