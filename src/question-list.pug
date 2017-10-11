@@ -1,0 +1,34 @@
+extends layout.pug
+
+block content
+    nav
+        .nav-wrapper
+            .col.s12
+                a.breadcrumb(href='#!') Administração
+                a.breadcrumb(href='#!') Lista de Questões
+    main.container.center-align
+        .row
+            .col.s12.m12
+                .card
+                    .card-content
+                        span.card-title 
+                            i.material-icons.left add_circle_outline
+                            span Questões
+                        table
+                            thead
+                                tr
+                                    th #
+                                    th Questão
+                                    th Ver
+                                    th Editar
+                                    th Excluir
+                            tbody
+                                tr
+                                    td 1
+                                    td.truncate Eclair
+                                    td 
+                                        i.material-icons visibility
+                                    td 
+                                        i.material-icons edit
+                                    td 
+                                        i.material-icons delete_forever

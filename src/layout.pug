@@ -2,6 +2,7 @@ doctype html
 html(lang='pt-br')
   head
     meta(charset='utf-8')
+    link(href='/img/favicon.ico', rel='shortcut icon')
     link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
     link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
@@ -13,9 +14,8 @@ html(lang='pt-br')
       nav
         .nav-wrapper
           ul#nav-mobile.left.hide-on-med-and-down
-            each val in ['zero', 'one', 'two']
-                li
-                    a= val
+            li
+                a(href='question-list.html') Questões
           a.brand-logo.center(href='index.html') Logo
           ul.right.hide-on-med-and-down
             each val in ['zero', 'one', 'two']
