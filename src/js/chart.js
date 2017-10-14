@@ -1,3 +1,4 @@
+'use strict';
 $(document).ready(function () {
     google.charts.load('current', {
         'packages': ['corechart']

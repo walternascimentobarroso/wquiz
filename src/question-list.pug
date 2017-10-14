@@ -12,7 +12,8 @@ block content
                 .card
                     .card-content
                         span.card-title 
-                            i.material-icons.left add_circle_outline
+                            a(href="question-add.html")
+                                i.material-icons.left.green-text.text-accent-4 add_circle_outline
                             span Questões
                         table
                             thead
@@ -27,8 +28,11 @@ block content
                                     td 1
                                     td.truncate Eclair
                                     td 
-                                        i.material-icons visibility
+                                        i.material-icons.blue-text.text-accent-4 visibility
                                     td 
-                                        i.material-icons edit
+                                        i.material-icons.yellow-text.text-accent-4 edit
                                     td 
-                                        i.material-icons delete_forever
+                                        i.material-icons.red-text.text-accent-4 delete_forever
+    block append scripts
+        script(src='https://www.gstatic.com/firebasejs/4.5.1/firebase.js')
+        script(src='js/firebase-admin-list.js')
