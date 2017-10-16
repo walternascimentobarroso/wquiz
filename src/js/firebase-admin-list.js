@@ -1,4 +1,4 @@
-$(document).ready(function () {
+document.addEventListener('DOMContentLoaded', function () {
     'use strict';
     // Initialize Firebase
     var config = {
@@ -42,17 +42,18 @@ $(document).ready(function () {
             tr.appendChild(td);
 
             var td = document.createElement('td');
-            td.innerHTML = '<a class="removeQuestion" href="#" data="' + data.key + '"><i class="material-icons red-text text-accent-4">delete_forever</i></a>';
+            td.innerHTML = '<a href="#" data="' + data.key + '"><i class="material-icons red-text text-accent-4">delete_forever</i></a>';
             tr.appendChild(td);
 
             tbody.appendChild(tr);
         });
     }
 
-    //Removendo questão da lista de exibição
-    document.getElementsByClassName("removeQuestion").addEventListener('click', function (e) {
-        console.log(this.getAttribute('data'));
-        db.ref('question/' + this.getAttribute('data')).remove();
-        e.preventDefault ? e.preventDefault() : e.returnValue = false;
+    // Pega o elemento e adiciona um listener para click
+    document.querySelector('tbody').addEventListener('click', function (e) {
+        if (e.target && e.target.nodeName == 'I') {
+            e.target.parentNode.parentNode.parentNode.remove();
+            db.ref('question/' + e.target.parentNode.getAttribute('data')).remove();
+        }
     }, false);
 });
