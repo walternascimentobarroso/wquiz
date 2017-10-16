@@ -17,16 +17,19 @@ block content
                                 i.material-icons.left.blue-text.text-accent-4 arrow_back
                             span Nova Questão
                         .row
-                            form.col.s12
-                                .row
-                                    .input-field.col.s10
-                                        i.material-icons.prefix live_help
-                                        input#question.validate(type='text')
-                                        label(for='question') Questão
-                                    .input-field.col.s2
-                                        button.btn.waves-effect.waves-light
-                                            | Criar
-                            fieldset
+                            //- form.col.s12
+                            .row
+                                .input-field.col.s10
+                                    i.material-icons.prefix live_help
+                                    input#question.validate(type='text')
+                                    label(for='question') Questão
+                                .input-field.col.s2
+                                    button.btn.waves-effect.waves-light#createQuestion
+                                        | Criar
+                                    button.btn.waves-effect.waves-light.red.hide#deleteQuestion
+                                        | Deletar
+                            fieldset.hide
+                                input(type="hidden")#secret
                                 legend Respostas
                                 .row
                                     .input-field.col.s6
@@ -50,7 +53,7 @@ block content
                                         br
                                         i.material-icons.red-text.text-accent-4 delete_forever
 
-                                button.btn.waves-effect.waves-light.white.black-text
+                                a(href="question-list.html").btn.waves-effect.waves-light.white.black-text
                                     | Cancelar
                                     i.material-icons.right clear
                                 button.btn.waves-effect.waves-light
