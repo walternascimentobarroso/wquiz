@@ -14,6 +14,9 @@ block content
               span.card-title Questão
               p Respostas
             .card-action
-              a.waves-effect.waves-light.btn.blue.darken-1(href='#') Anterior
+              a.left.waves-effect.waves-light.btn.blue.darken-1(href='#') Anterior
               a.waves-effect.waves-light.btn.blue.darken-3(href='#') Proxima
-              a.waves-effect.waves-light.btn.red(href='gameover.html') Finalizar
+              a.right.waves-effect.waves-light.btn.red(href='gameover.html') Finalizar
+    block append scripts
+        script(src='https://www.gstatic.com/firebasejs/4.5.1/firebase.js')
+        script(src='js/firebase-list.js')

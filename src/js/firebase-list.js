@@ -49,11 +49,4 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Pega o elemento e adiciona um listener para click
-    document.querySelector('tbody').addEventListener('click', function (e) {
-        if (e.target && e.target.nodeName == 'I' && e.target.parentNode.hasAttribute('data')) {
-            e.target.parentNode.parentNode.parentNode.remove();
-            db.ref('question/' + e.target.parentNode.getAttribute('data')).remove();
-        }
-    }, false);
 });

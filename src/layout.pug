@@ -11,6 +11,14 @@ html(lang='pt-br')
     title WQUIZ
   body
     header
+      // Dropdown Structure
+      ul#dropdown1.dropdown-content
+        li
+          a(href='#!') Login
+        li.divider
+        li
+          a(href='#!') Cadastro
+
       nav
         .nav-wrapper
           ul#nav-mobile.left.hide-on-med-and-down
@@ -18,9 +26,9 @@ html(lang='pt-br')
                 a(href='question-list.html') Questões
           a.brand-logo.center(href='index.html') Logo
           ul.right.hide-on-med-and-down
-            each val in ['zero', 'one', 'two']
-                li
-                    a= val
+            li
+                a.dropdown-button(href="#!" data-activates="dropdown1") Acesse
+                    i.material-icons.right arrow_drop_down
 
     block content
 
@@ -31,11 +39,15 @@ html(lang='pt-br')
             h5.white-text Footer Content
             p.grey-text.text-lighten-4 You can use rows and columns here to organize your footer content.
           .col.l4.offset-l2.s12
-            h5.white-text Baixe
+            h5.white-text Download
             ul
-                each val in ['Link 1', 'Link 2', 'Link 3', 'Link 4']
-                    li
-                        a.grey-text.text-lighten-3(href='#!')= val
+                li
+                    img(src="img/google-play-store_pt.png", width="220", height="50", alt="Baixe para o Android")
+                li
+                    img(src="img/app-store_pt.png", width="220", height="50", alt="Baixe para o Iphone")
+                li
+                    img(src="img/windows-store_pt.png", width="220", height="50", alt="Baixe para o WindowsPhone")
+
       .footer-copyright
         .container
           | © 2017 Copyright

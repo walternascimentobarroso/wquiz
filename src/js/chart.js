@@ -1,5 +1,5 @@
-'use strict';
-$(document).ready(function () {
+document.addEventListener('DOMContentLoaded', function () {
+    'use strict';
     google.charts.load('current', {
         'packages': ['corechart']
     });
