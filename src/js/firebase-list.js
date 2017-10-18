@@ -20,33 +20,22 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     function listando(data) {
-        var tbody = document.querySelector('tbody');
+        // console.log(data.val());
         data.forEach(function (data) {
-            var tr = document.createElement('tr');
-
-            var td = document.createElement('td');
-            td.innerHTML = data.key;
-            tr.appendChild(td);
-
-            var td = document.createElement('td');
-            td.innerHTML = data.val().description;
-            td.className = "truncate";
-            tr.appendChild(td);
-
-            var td = document.createElement('td');
-            td.innerHTML = '<i class="material-icons blue-text text-accent-4">visibility</i>';
-            tr.appendChild(td);
-
-            var td = document.createElement('td');
-            td.innerHTML = '<i class="material-icons yellow-text text-accent-4">edit</i>';
-            tr.appendChild(td);
-
-            var td = document.createElement('td');
-            td.innerHTML = '<a href="#" data="' + data.key + '"><i class="material-icons red-text text-accent-4">delete_forever</i></a>';
-            tr.appendChild(td);
-
-            tbody.appendChild(tr);
+            // console.log(data.val());
+            document.querySelector('.card-title').innerHTML = data.val().description;
+            document.querySelector('#answers').innerHTML = data.val().options;
         });
     }
+
+    time = 30;
+    setInterval( function(){
+        document.querySelector('#time').innerHTML = time;
+        document.querySelector('.determinate.red').style.width = (100 - (time/0.3))+'%';
+        time = time - 1;
+        if(time == 0) {
+            location.href="gameover.html";
+        }
+    }, 1000);
 
 });
