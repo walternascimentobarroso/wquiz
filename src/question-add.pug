@@ -31,10 +31,11 @@ block content
                             fieldset.hide
                                 input(type="hidden")#secret
                                 legend Respostas
-                                .row
+                                .row#answers
                                     .input-field.col.s6
                                         i.material-icons.prefix info_outline
-                                        input#question.validate(type='text')
+                                        input.validate(type='text')
+                                        input(type="hidden").answersecret
                                         label(for='answer') Resposta
                                     .switch.col.s4
                                         br
@@ -44,19 +45,21 @@ block content
                                             input(type='checkbox')
                                             span.lever
                                             | Verdadeiro
-                                    .col.s1
+                                    .col.s2
                                         br
                                         br
-                                        i.material-icons.left.green-text.text-accent-4 add_circle_outline
-                                    .col.s1
+                                        button.btn.waves-effect.waves-light(data='inserirAnswer')
+                                            i.material-icons add_circle_outline
+                                    .col.s2.hide
                                         br
                                         br
-                                        i.material-icons.red-text.text-accent-4 delete_forever
+                                        button.btn.waves-effect.waves-light.red(data='deleteAnswer')
+                                            i.material-icons delete_forever
 
                                 a(href="question-list.html").btn.waves-effect.waves-light.white.black-text
                                     | Cancelar
                                     i.material-icons.right clear
-                                button.btn.waves-effect.waves-light
+                                a(href="question-list.html").btn.waves-effect.waves-light
                                     | Salvar
                                     i.material-icons.right add
     block append scripts

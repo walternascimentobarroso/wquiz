@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("createQuestion").addEventListener('click', function createquestion() {
         var question = document.getElementById("question");
         var idquestion = create(question.value);
-        console.log(idquestion.key);
         document.getElementById("secret").value = idquestion.key;
         question.setAttribute('disabled', 'disabled');
         this.classList.add('hide');
@@ -49,23 +48,57 @@ document.addEventListener('DOMContentLoaded', function () {
         return db.ref('question').push(data);
     }
 
-    // var ref = db.ref("question/" + idquestion + "/options");
+    // Função para manipular respostas
+    document.querySelector('#answers').addEventListener('click', function (e) {
+        if (e.target && e.target.nodeName == 'BUTTON' && e.target.hasAttribute('data')) {
+            if (e.target.getAttribute('data') == "inserirAnswer") {
+                addAnswer(e);
+            } else if (e.target.getAttribute('data') == "deleteAnswer") {
+                removeAnswer(e);
+            }
+        }
+    }, false);
 
-    // // Ler as respostas
-    // ref.on("value", function (snapshot) {
-    //     console.log(snapshot.val());
-    // }, function (errorObject) {
-    //     console.log("The read failed: " + errorObject.code);
-    // });
+    // Função para adicionar resposta
+    function addAnswer(e) {
+        var idquestion = document.getElementById("secret").value
+        var ef = "question/" + idquestion + "/options";
+        var ref = db.ref(ef);
+        var answer_text = e.target.parentNode.parentNode.querySelector("input[type='text']").value;
+        var answer_true = e.target.parentNode.parentNode.querySelector("input[type='checkbox']").checked;
 
-    // // Função para criar as respostas
-    // // createAnswer('nameInput.value');
-    // function createAnswer(answer) {
-    //     var data = {
-    //         description: answer,
-    //         is_true: "true"
-    //     };
+        var data = {
+            answer: answer_text,
+            is_true: answer_true
+        };
+        var idanswer = ref.push(data);
+        e.target.parentNode.parentNode.querySelector("input[type='hidden'].answersecret").value = idanswer.key;
+        
 
-    //     return ref.push(data);
-    // }
+        e.target.parentNode.parentNode.querySelector("input[type='text']").setAttribute('disabled', 'disabled');
+        e.target.parentNode.parentNode.querySelector("input[type='checkbox']").setAttribute('disabled', 'disabled');
+        e.target.parentNode.parentNode.querySelector("button[data='inserirAnswer']").parentNode.classList.add('hide');
+        e.target.parentNode.parentNode.querySelector("button[data='deleteAnswer']").parentNode.classList.remove('hide');
+    }
+
+    // Função para adicionar resposta
+    function removeAnswer(e) {
+        var answer_text = e.target.parentNode.parentNode.querySelector("input[type='text']");
+        answer_text.removeAttribute('disabled');
+        answer_text.value = '';
+        answer_text.focus();
+
+        var answer_text = e.target.parentNode.parentNode.querySelector("input[type='checkbox']");
+        answer_text.removeAttribute('disabled');
+
+        var idquestion = document.getElementById("secret").value
+        var idanswer = e.target.parentNode.parentNode.querySelector("input[type='hidden'].answersecret").value
+        var ef = "question/" + idquestion + "/options/" + idanswer;
+        var ref = db.ref(ef);
+        ref.remove();
+
+        e.target.parentNode.parentNode.querySelector("input[type='checkbox']").checked = false;
+        e.target.parentNode.parentNode.querySelector("button[data='inserirAnswer']").parentNode.classList.remove('hide');
+        e.target.parentNode.parentNode.querySelector("button[data='deleteAnswer']").parentNode.classList.add('hide');
+    }
 });
