@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Função para manipular respostas
-    document.querySelector('#answers').addEventListener('click', function (e) {
+    document.querySelector('fieldset').addEventListener('click', function (e) {
         if (e.target && e.target.nodeName == 'BUTTON' && e.target.hasAttribute('data')) {
             if (e.target.getAttribute('data') == "inserirAnswer") {
                 addAnswer(e);
@@ -73,12 +73,34 @@ document.addEventListener('DOMContentLoaded', function () {
         };
         var idanswer = ref.push(data);
         e.target.parentNode.parentNode.querySelector("input[type='hidden'].answersecret").value = idanswer.key;
-        
-
         e.target.parentNode.parentNode.querySelector("input[type='text']").setAttribute('disabled', 'disabled');
         e.target.parentNode.parentNode.querySelector("input[type='checkbox']").setAttribute('disabled', 'disabled');
         e.target.parentNode.parentNode.querySelector("button[data='inserirAnswer']").parentNode.classList.add('hide');
         e.target.parentNode.parentNode.querySelector("button[data='deleteAnswer']").parentNode.classList.remove('hide');
+
+
+        var $wrapper = e.target.parentNode.parentNode,
+        HTMLNovo = `<div class="row">
+                    <div class="input-field col s6"><i class="material-icons prefix">info_outline</i>
+                      <input class="validate" type="text">
+                      <input class="answersecret" type="hidden">
+                      <label for="answer">Resposta</label>
+                    </div>
+                    <div class="switch col s4"><br><br>
+                      <label>Falso
+                        <input type="checkbox"><span class="lever"></span>Verdadeiro
+                      </label>
+                    </div>
+                    <div class="col s2"><br><br>
+                      <button class="btn waves-effect waves-light" data="inserirAnswer"><i class="material-icons">add_circle_outline</i></button>
+                    </div>
+                    <div class="col s2 hide"><br><br>
+                      <button class="btn waves-effect waves-light red" data="deleteAnswer"><i class="material-icons">delete_forever</i></button>
+                    </div>
+                  </div>`;
+        $wrapper.insertAdjacentHTML('afterend', HTMLNovo);
+
+        console.log('dsad');
     }
 
     // Função para adicionar resposta
