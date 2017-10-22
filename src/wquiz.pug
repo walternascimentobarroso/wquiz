@@ -3,7 +3,8 @@ extends layout.pug
 block content
     main.container.center-align
       .row
-        .col.s12.m12
+        img(src='img/loading.gif').circle.responsive-img#imgconent
+        .col.s12.m12.hide#contentnoimg
           .card-panel.teal
             span.white-text.left 
                 span#questionpage 1 
@@ -21,7 +22,8 @@ block content
             .card-action
               button.left.waves-effect.waves-light.btn.blue.darken-1(disabled='disabled')#anterior Anterior
               button.waves-effect.waves-light.btn.blue.darken-3#proxima Proxima
-              a.right.waves-effect.waves-light.btn.red(href='gameover.html') Finalizar
+              button.right.waves-effect.waves-light.btn.red#gameover Finalizar
     block append scripts
+        script(type='text/javascript', src='https://www.gstatic.com/charts/loader.js')
         script(src='https://www.gstatic.com/firebasejs/4.5.1/firebase.js')
         script(src='js/firebase-list.js')

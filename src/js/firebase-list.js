@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var totalQuestion = 0;
     var questionBase = '';
     var questionpage = 0;
+    var totalPontos = 0;
 
     function listando(data) {
         totalQuestion = data.numChildren();
@@ -35,6 +36,8 @@ document.addEventListener('DOMContentLoaded', function () {
             index = index + 1;
         });
         montedQuestion(data.child(keyIndex[0]));
+        document.getElementById("imgconent").classList.add('hide');
+        document.getElementById("contentnoimg").classList.remove('hide');
     }
 
     document.querySelector('#proxima').addEventListener('click', function (e) {
@@ -47,7 +50,24 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById("progressbar").style.width = (questionpage + 1) / (totalQuestion / 100) + "%";
             document.getElementById("questionpage").innerHTML = questionpage + 1;
         }
+        gamePoint();
         montedQuestion(questionBase.child(keyIndex[questionpage]));
+    }, false);
+
+    function gamePoint() {
+        var checado = document.querySelector('input[type="radio"]:checked');
+        if (checado.value == "true") {
+            totalPontos = totalPontos + 1;
+        }
+    }
+
+    document.querySelector('#gameover').addEventListener('click', function (e) {
+        document.querySelector('.card-title').innerHTML = "Parabéns";
+        var respostas = document.querySelector('#answers');
+        respostas.innerHTML = `Você acertou ${totalPontos}/${totalQuestion}`;
+        respostas.classList.remove('left-align');
+        respostas.insertAdjacentHTML('afterend', '<div id="#answers"></div>');
+        creatChart();
     }, false);
 
     document.querySelector('#anterior').addEventListener('click', function (e) {
@@ -84,5 +104,29 @@ document.addEventListener('DOMContentLoaded', function () {
             location.href = "gameover.html";
         }
     }, 1000);
+
+    function creatChart() {
+        google.charts.load('current', {
+        'packages': ['corechart']
+    });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Descrição dos pontos', 'Total de Pontos'],
+            ['Certas', totalPontos],
+            ['Erradas', totalPontos-totalQuestion]
+        ]);
+        var options = {
+            title: 'Respostas',
+            pieHole: 0.4,
+            is3D: true,
+        };
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        chart.draw(data, options);
+    }
+    }
+
+
 
 });
