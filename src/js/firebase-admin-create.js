@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         var $wrapper = e.target.parentNode.parentNode,
-        HTMLNovo = `<div class="row">
+            HTMLNovo = `<div class="row">
                     <div class="input-field col s6"><i class="material-icons prefix">info_outline</i>
                       <input class="validate" type="text">
                       <input class="answersecret" type="hidden">
@@ -105,13 +105,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Função para adicionar resposta
     function removeAnswer(e) {
-        var answer_text = e.target.parentNode.parentNode.querySelector("input[type='text']");
-        answer_text.removeAttribute('disabled');
-        answer_text.value = '';
-        answer_text.focus();
+        // var answer_text = e.target.parentNode.parentNode.querySelector("input[type='text']");
+        // answer_text.removeAttribute('disabled');
+        // answer_text.value = '';
+        // answer_text.focus();
 
-        var answer_text = e.target.parentNode.parentNode.querySelector("input[type='checkbox']");
-        answer_text.removeAttribute('disabled');
+        // var answer_text = e.target.parentNode.parentNode.querySelector("input[type='checkbox']");
+        // answer_text.removeAttribute('disabled');
 
         var idquestion = document.getElementById("secret").value
         var idanswer = e.target.parentNode.parentNode.querySelector("input[type='hidden'].answersecret").value
@@ -119,8 +119,11 @@ document.addEventListener('DOMContentLoaded', function () {
         var ref = db.ref(ef);
         ref.remove();
 
-        e.target.parentNode.parentNode.querySelector("input[type='checkbox']").checked = false;
-        e.target.parentNode.parentNode.querySelector("button[data='inserirAnswer']").parentNode.classList.remove('hide');
-        e.target.parentNode.parentNode.querySelector("button[data='deleteAnswer']").parentNode.classList.add('hide');
+        // e.target.parentNode.parentNode.querySelector("input[type='checkbox']").checked = false;
+        // e.target.parentNode.parentNode.querySelector("button[data='inserirAnswer']").parentNode.classList.remove('hide');
+        // e.target.parentNode.parentNode.querySelector("button[data='deleteAnswer']").parentNode.classList.add('hide');
+        // if (document.querySelectorAll('fieldset > div').length > 1) {
+        e.target.parentNode.parentNode.remove();
+        // }
     }
 });

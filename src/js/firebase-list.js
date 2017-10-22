@@ -66,9 +66,13 @@ document.addEventListener('DOMContentLoaded', function () {
     function montedQuestion(data) {
         document.querySelector('.card-title').innerHTML = data.val().description;
         var answers = data.val().options;
+        var HTMLAnswers = '';
         for (var key in answers) {
-            document.querySelector('#answers').innerHTML = answers[key].answer;
+            var HTMLAnswer = `<p><input name="group1" type="radio" id="${key}" value="${answers[key].is_true}" />
+                              <label for="${key}">${answers[key].answer}</label></p>`;
+            HTMLAnswers = HTMLAnswers + HTMLAnswer;
         }
+        document.querySelector('#answers').innerHTML = HTMLAnswers;
     }
 
     var time = 30;
