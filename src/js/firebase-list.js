@@ -107,26 +107,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function creatChart() {
         google.charts.load('current', {
-        'packages': ['corechart']
-    });
-    google.charts.setOnLoadCallback(drawChart);
+            'packages': ['corechart']
+        });
+        google.charts.setOnLoadCallback(drawChart);
 
-    function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-            ['Descrição dos pontos', 'Total de Pontos'],
-            ['Certas', totalPontos],
-            ['Erradas', totalPontos-totalQuestion]
-        ]);
-        var options = {
-            title: 'Respostas',
-            pieHole: 0.4,
-            is3D: true,
-        };
-        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-        chart.draw(data, options);
+        function drawChart() {
+            google.charts.load('current', {
+                'packages': ['corechart']
+            });
+            google.charts.setOnLoadCallback(drawChart);
+        
+            function drawChart() {
+                var data = google.visualization.arrayToDataTable([
+                    ['Descrição', 'Pontos'],
+                    ['Certas', totalPontos],
+                    ['Erradas', totalQuestion - totalPontos]
+                ]);
+                var options = {
+                    title: 'Respostas',
+                    pieHole: 0.4,
+                    is3D: true,
+                };
+                var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+                chart.draw(data, options);
+            }
+        }
     }
-    }
-
-
-
 });
