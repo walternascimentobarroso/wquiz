@@ -54,6 +54,9 @@ document.addEventListener('DOMContentLoaded', function () {
         montedQuestion(questionBase.child(keyIndex[questionpage]));
     }, false);
 
+    /**
+     * Função que realiza as operações do jogo(soma de pontos e verifica de respostas)
+     */
     function gamePoint() {
         var checado = document.querySelector('input[type="radio"]:checked');
         if (checado.value == "true") {
@@ -62,6 +65,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     document.querySelector('#gameover').addEventListener('click', function (e) {
+        this.classList.add('hide');
+        document.querySelector('#back').classList.remove('hide');
+
+        document.querySelector('#proxima').setAttribute('disabled', 'disabled');
+        document.querySelector('#anterior').setAttribute('disabled', 'disabled');
         document.querySelector('.card-title').innerHTML = "Parabéns";
         var respostas = document.querySelector('#answers');
         respostas.innerHTML = `Você acertou ${totalPontos}/${totalQuestion}`;

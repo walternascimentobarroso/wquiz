@@ -29,7 +29,8 @@ document.addEventListener('DOMContentLoaded', function () {
             tr.appendChild(td);
 
             var td = document.createElement('td');
-            td.innerHTML = data.val().description;
+            var texto = data.val().description
+            td.innerHTML = texto.substring(0, 50) + "...";
             td.className = "truncate";
             tr.appendChild(td);
 
