@@ -59,12 +59,27 @@ document.addEventListener('DOMContentLoaded', function () {
      */
     function gamePoint() {
         var checado = document.querySelector('input[type="radio"]:checked');
-        if (checado.value == "true") {
-            totalPontos = totalPontos + 1;
+
+        var gameChecked = {};
+        for (var i = 0; i < totalQuestion - 1; i++) {
+            gameChecked[i] = {};
+            if (checado != null) {
+                gameChecked[i].questionChecked = checado.id;
+            }
+            gameChecked[i].keyIndex = keyIndex[i];
+        }
+        console.log(gameChecked);
+
+        if (checado != null) {
+            console.log(keyIndex);
+            if (checado.value == "true") {
+                totalPontos = totalPontos + 1;
+            }
         }
     }
 
     document.querySelector('#gameover').addEventListener('click', function (e) {
+        gamePoint();
         this.classList.add('hide');
         document.querySelector('#back').classList.remove('hide');
 
@@ -124,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 'packages': ['corechart']
             });
             google.charts.setOnLoadCallback(drawChart);
-        
+
             function drawChart() {
                 var data = google.visualization.arrayToDataTable([
                     ['Descrição', 'Pontos'],
