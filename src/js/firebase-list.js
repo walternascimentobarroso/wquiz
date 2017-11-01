@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var questionBase = '';
     var questionpage = 0;
     var totalPontos = 0;
+    var gameChecked = {};
 
     function listando(data) {
         totalQuestion = data.numChildren();
@@ -41,45 +42,47 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     document.querySelector('#proxima').addEventListener('click', function (e) {
-        if (questionpage != totalQuestion - 1) {
-            if (questionpage == totalQuestion - 2) {
-                this.setAttribute('disabled', 'disabled');
-            }
-            document.querySelector('#anterior').removeAttribute('disabled');
-            questionpage = questionpage + 1;
-            document.getElementById("progressbar").style.width = (questionpage + 1) / (totalQuestion / 100) + "%";
-            document.getElementById("questionpage").innerHTML = questionpage + 1;
-        }
-        gamePoint();
-        montedQuestion(questionBase.child(keyIndex[questionpage]));
+        gamePoint('next');
     }, false);
 
     /**
      * Função que realiza as operações do jogo(soma de pontos e verifica de respostas)
      */
-    function gamePoint() {
-        var checado = document.querySelector('input[type="radio"]:checked');
-
-        var gameChecked = {};
-        for (var i = 0; i < totalQuestion - 1; i++) {
-            gameChecked[i] = {};
-            if (checado != null) {
-                gameChecked[i].questionChecked = checado.id;
-            }
-            gameChecked[i].keyIndex = keyIndex[i];
-        }
+    function gamePoint(direction) {
         console.log(gameChecked);
-
+        var checado = document.querySelector('input[type="radio"]:checked');
         if (checado != null) {
-            console.log(keyIndex);
-            if (checado.value == "true") {
-                totalPontos = totalPontos + 1;
+            gameChecked[keyIndex[questionpage]] = {};
+            gameChecked[keyIndex[questionpage]].questionChecked = checado.id;
+        }
+        if (direction == 'next') {
+            if (questionpage != totalQuestion - 1) {
+                if (questionpage == totalQuestion - 2) {
+                    document.querySelector('#proxima').setAttribute('disabled', 'disabled');
+                }
+                document.querySelector('#anterior').removeAttribute('disabled');
+                questionpage = questionpage + 1;
+                document.getElementById("progressbar").style.width = (questionpage + 1) / (totalQuestion / 100) + "%";
+                document.getElementById("questionpage").innerHTML = questionpage + 1;
             }
+
+            montedQuestion(questionBase.child(keyIndex[questionpage]));
+        } else {
+            if (questionpage != 0) {
+                if (questionpage == 1) {
+                    document.querySelector('#anterior').setAttribute('disabled', 'disabled');
+                }
+                document.querySelector('#proxima').removeAttribute('disabled');
+                questionpage = questionpage - 1;
+                document.getElementById("progressbar").style.width = (questionpage + 1) / (totalQuestion / 100) + "%";
+                document.getElementById("questionpage").innerHTML = questionpage + 1;
+            }
+            montedQuestion(questionBase.child(keyIndex[questionpage]));
         }
     }
 
     document.querySelector('#gameover').addEventListener('click', function (e) {
-        gamePoint();
+        // gamePoint(questionatual);
         this.classList.add('hide');
         document.querySelector('#back').classList.remove('hide');
 
@@ -94,25 +97,23 @@ document.addEventListener('DOMContentLoaded', function () {
     }, false);
 
     document.querySelector('#anterior').addEventListener('click', function (e) {
-        if (questionpage != 0) {
-            if (questionpage == 1) {
-                this.setAttribute('disabled', 'disabled');
-            }
-            document.querySelector('#proxima').removeAttribute('disabled');
-            questionpage = questionpage - 1;
-            document.getElementById("progressbar").style.width = (questionpage + 1) / (totalQuestion / 100) + "%";
-            document.getElementById("questionpage").innerHTML = questionpage + 1;
-        }
-        montedQuestion(questionBase.child(keyIndex[questionpage]));
+        gamePoint('back');
     }, false);
 
     function montedQuestion(data) {
         document.querySelector('.card-title').innerHTML = data.val().description;
         var answers = data.val().options;
         var HTMLAnswers = '';
+        var checado = 'checked="checked"';
         for (var key in answers) {
-            var HTMLAnswer = `<p><input name="group1" type="radio" id="${key}" value="${answers[key].is_true}" />
+            var HTMLAnswer = '';
+            if (gameChecked[data.key] != undefined && gameChecked[data.key].questionChecked == key) {
+                HTMLAnswer = `<p><input name="group1" type="radio" id="${key}" value="${answers[key].is_true}" ${checado} />
+                 <label for="${key}">${answers[key].answer}</label></p>`;
+            } else {
+                HTMLAnswer = `<p><input name="group1" type="radio" id="${key}" value="${answers[key].is_true}" />
                               <label for="${key}">${answers[key].answer}</label></p>`;
+            }
             HTMLAnswers = HTMLAnswers + HTMLAnswer;
         }
         document.querySelector('#answers').innerHTML = HTMLAnswers;
