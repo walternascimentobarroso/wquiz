@@ -57,5 +57,6 @@ gulp.task('serve', function () {
 });
 
 gulp.task('default', ['html', 'css', 'js', 'img', 'serve']);
+gulp.task('deploy', ['html', 'css', 'js', 'img']);
 
 // echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
