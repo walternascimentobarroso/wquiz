@@ -4,3 +4,10 @@
 
 ====
 ## Sistema de perguntas e respostas
+
+## Install
+```
+git clone https://github.com/walternascimentobarroso/wquiz.git
+npm install
+gulp
+```
