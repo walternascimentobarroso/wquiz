@@ -127,4 +127,14 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener("load", askQuestion, false);
     submitBtn.addEventListener("click", checkAnswer, false);
 
+
+    var time = 30;
+    setInterval(function () {
+        document.querySelector('#time').innerHTML = time;
+        document.querySelector('.determinate.red').style.width = (100 - (time / 0.3)) + '%';
+        // time = time - 1;
+        if (time == 0) {
+            location.href = "gameover.html";
+        }
+    }, 1000);
 });
