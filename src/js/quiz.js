@@ -26,6 +26,12 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("imgconent").classList.add('hide');
     document.getElementById("contentnoimg").classList.remove('hide');
 
+    var questionpage = 0,
+        totalQuestion = quiz.length;
+        document.getElementById("progressbar").style.width = (questionpage + 1) / (totalQuestion / 100) + "%";
+        document.getElementById("totalquestion").innerHTML = totalQuestion;
+        
+
     // define elements
     var content = $("content"),
         questionContainer = $("question"),
