@@ -36,7 +36,6 @@ document.addEventListener('DOMContentLoaded', function () {
     var content = $("content"),
         questionContainer = $("question"),
         choicesContainer = $("choices"),
-        scoreContainer = $("score"),
         submitBtn = $("submit");
 
     // init vars
@@ -69,8 +68,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // setup for the first time
         if (currentQuestion === 0) {
-            scoreContainer.textContent = "Score: 0 right answers out of " +
-                quiz.length + " possible.";
             submitBtn.textContent = "Enviar";
         }
     }
@@ -106,8 +103,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 labelStyle.color = "red";
             }
 
-            scoreContainer.textContent = "Score: " + score + " right answers out of " +
-                quiz.length + " possible.";
         } else { // move to next question
             // setting up so user can ask a question
             askingQuestion = true;
