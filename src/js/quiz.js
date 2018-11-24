@@ -26,11 +26,6 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("imgconent").classList.add('hide');
     document.getElementById("contentnoimg").classList.remove('hide');
 
-    var questionpage = 0,
-        totalQuestion = quiz.length;
-        document.getElementById("progressbar").style.width = (questionpage + 1) / (totalQuestion / 100) + "%";
-        document.getElementById("totalquestion").innerHTML = totalQuestion;
-        
 
     // define elements
     var content = $("content"),
@@ -40,8 +35,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // init vars
     var currentQuestion = 0,
+        currentPage = 1,
         score = 0,
         askingQuestion = true;
+
+    var totalQuestion = quiz.length;
+    document.getElementById("progressbar").style.width = (currentQuestion + 1) / (totalQuestion / 100) + "%";
+    document.getElementById("totalquestion").innerHTML = totalQuestion;
 
     function $(id) {
         return document.getElementById(id);
@@ -73,6 +73,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function checkAnswer() {
+
+        // if(currentQuestion+1 == totalQuestion) {
+
+        // }
         // are we asking a question, or proceeding to next question?
         if (askingQuestion) {
             submitBtn.textContent = "Próximo";
@@ -104,6 +108,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
         } else { // move to next question
+            currentPage = currentPage + 1
+            document.getElementById("questionpage").innerHTML = currentPage;
             // setting up so user can ask a question
             askingQuestion = true;
             // change button text back to "Submit Answer"
