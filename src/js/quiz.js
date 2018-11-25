@@ -74,9 +74,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function checkAnswer() {
 
-        // if(currentQuestion+1 == totalQuestion) {
-
-        // }
         // are we asking a question, or proceeding to next question?
         if (askingQuestion) {
             submitBtn.textContent = "Próximo";
@@ -105,6 +102,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 labelStyle.color = "green";
             } else {
                 labelStyle.color = "red";
+            }
+
+            if(currentQuestion+1 == totalQuestion) {
+                document.querySelector('#submit').setAttribute('disabled', 'disabled');
             }
 
         } else { // move to next question
