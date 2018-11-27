@@ -32,7 +32,8 @@ document.addEventListener('DOMContentLoaded', function () {
         questionContainer = $("question"),
         choicesContainer = $("choices"),
         backBtn = $("anterior"),
-        submitBtn = $("submit");
+        submitBtn = $("submit"),
+        gameoverBtn = $("gameover");
 
     // init vars
     var currentQuestion = 0,
@@ -135,28 +136,24 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function backQuestion() {
-        console.log(currentPage);
         if (currentQuestion == 1) {
             document.querySelector('#anterior').setAttribute('disabled', 'disabled');
         }
-        currentPage = currentPage - 1;
+        document.querySelector('#submit').removeAttribute('disabled');
+        currentQuestion--;
         document.getElementById("questionpage").innerHTML = currentPage;
         // setting up so user can ask a question
         askingQuestion = true;
         // change button text back to "Submit Answer"
         submitBtn.textContent = "Enviar";
         // if we're not on last question, increase question number
-        if (currentQuestion < quiz.length - 1) {
-            currentQuestion--;
-            askQuestion();
-        } else {
-            showFinalResults();
-        }
+        askQuestion();
     }
 
     window.addEventListener("load", askQuestion, false);
     submitBtn.addEventListener("click", checkAnswer, false);
     backBtn.addEventListener("click", backQuestion, false);
+    gameoverBtn.addEventListener("click", showFinalResults, false);
 
 
     var time = 30;
