@@ -108,6 +108,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (currentQuestion + 1 == totalQuestion) {
                 document.querySelector('#submit').setAttribute('disabled', 'disabled');
+                document.querySelector('#gameover').removeAttribute('disabled');
             }
 
         } else { // move to next question
@@ -140,6 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.querySelector('#anterior').setAttribute('disabled', 'disabled');
         }
         document.querySelector('#submit').removeAttribute('disabled');
+        document.querySelector('#gameover').setAttribute('disabled', 'disabled');
         currentQuestion--;
         document.getElementById("questionpage").innerHTML = currentPage;
         // setting up so user can ask a question
