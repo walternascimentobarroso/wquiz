@@ -126,6 +126,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 showFinalResults();
             }
+            document.getElementById("progressbar").style.width = (currentQuestion + 1) / (totalQuestion / 100) + "%";
         }
     }
 
