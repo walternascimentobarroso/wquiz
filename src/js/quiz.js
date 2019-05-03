@@ -144,6 +144,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelector('#submit').removeAttribute('disabled');
         document.querySelector('#gameover').setAttribute('disabled', 'disabled');
         currentQuestion--;
+        document.getElementById("progressbar").style.width = (currentQuestion + 1) / (totalQuestion / 100) + "%";
         document.getElementById("questionpage").innerHTML = currentPage;
         // setting up so user can ask a question
         askingQuestion = true;
