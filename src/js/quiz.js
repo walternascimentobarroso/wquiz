@@ -131,6 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function showFinalResults() {
+        clearInterval(refreshIntervalId);
         content.innerHTML = "<h2>You've complited the quiz!</h2>" +
             "<h2>Below are your results:</h2>" +
             "<h2>" + score + " out of " + quiz.length + " questions, " +
@@ -161,10 +162,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     var time = 30;
-    setInterval(function () {
+    var refreshIntervalId = setInterval(function () {
         document.querySelector('#time').innerHTML = time;
         document.querySelector('.determinate.red').style.width = (100 - (time / 0.3)) + '%';
-        // time = time - 1;
+        time = time - 1;
         if (time == 0) {
             location.href = "gameover.html";
         }
