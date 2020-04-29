@@ -20,7 +20,7 @@
     "browser-sync": "^2.18.13",
     "gulp": "^3.9.1",
     "gulp-pug": "^3.3.0",
-    "jquery": "^3.2.1",
+    "jquery": "^3.5.0",
     "materialize-css": "^0.100.2"
   }
 }
