@@ -1,0 +1,1382 @@
+[
+  {
+    "prompt": "[Q1] An HTML form contains this form element:\nWhen this form is submitted, the following PHP code gets run:\n\n$_FILES['myFile']['tmp_name'],\n    'uploads/' . $_FILES['myFile']['name']\n);",
+    "explanation": "O valor $_FILES['myFile']['name'] vem do cliente e pode ser forjado (incluindo\ntentativas de path traversal como ../../evil.php, inserção de caracteres especiais,\nou colisão de nomes para sobrescrever arquivos). Antes de usar esse nome no destino, é\nindispensável sanitizar/normalizar o nome (por exemplo, mantendo apenas letras,\nnúmeros, hífen/sublinhado, removendo extensões perigosas ou gerando um nome\naleatório).\n• (a) Verificar charset não é uma medida de segurança relevante para file upload.\n• (b) $HTTP_POST_FILES é legado/depreciado; $_FILES é o superglobal correto.\n• (c) move_uploaded_file() já valida que a origem é um upload válido; chamar\nis_uploaded_file() é redundante e não substitui a sanitização do nome.\n Alternativa correta:  d) Sanitize the file name in $_FILES['myFile']['name'] because\nthis value could be forged.",
+    "options": [
+      {
+        "text": "Check the charset encoding of the HTTP request to see whether it matches the\nencoding of the uploaded file.",
+        "correct": false
+      },
+      {
+        "text": "Use $HTTP_POST_FILES instead of $_FILES to maintain upwards compatibility.",
+        "correct": false
+      },
+      {
+        "text": "Check with is_uploaded_file() whether the uploaded file $_FILES['myFile']['tmp_name']\nis valid.",
+        "correct": false
+      },
+      {
+        "text": "Sanitize the file name in $_FILES['myFile']['name'] because this value could be forged.\n<input type=\"file\" name=\"myFile\">\nmove_uploaded_file(",
+        "correct": true
+      }
+    ]
+  },
+  {
+    "prompt": "[Q2] Given the following code:\nWhich expression may be used instead of the *** placeholder to log an \"Info\" message?\n\nnamespace PHP;\nenum Category {\n    case Info;\n    case Warning;\n    case Error;\n};\nfunction log(string $message, Category $category) {\n    echo \"$message {$category->name}\";\n}\nlog(\"My message\", ***);",
+    "explanation": "Em PHP 8.1+, enums são acessados utilizando o operador de resolução de escopo duplo\n(::).\nNo exemplo, Category é uma enum com os casos Info, Warning e Error. Para\npassar o valor correto da enum à função log, deve-se usar Category::Info.\n• (a) Category['Info'] não é válido, pois enums não são arrays.\n• (b) Category.Info não existe em PHP, essa sintaxe lembra JavaScript.\n• (d) Category->Info também é incorreto, já que -> acessa\npropriedades/métodos de objetos, não enums.\n  Portanto, a forma correta é Category::Info.",
+    "options": [
+      {
+        "text": "Category['Info']",
+        "correct": false
+      },
+      {
+        "text": "Category.Info",
+        "correct": false
+      },
+      {
+        "text": "Category::Info",
+        "correct": true
+      },
+      {
+        "text": "Category->Info",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q3] How can you create an HTTP POST request in PHP without having to install or activate a\nPHP extension?",
+    "explanation": "Em PHP, é possível enviar requisições POST usando apenas funções nativas, sem\nprecisar instalar extensões como cURL.\nA função file_get_contents(), quando utilizada junto com um stream context\nconfigurado com http e método POST, permite enviar dados para uma URL. Exemplo:\n(b) curl_exec() funciona, mas depende da extensão cURL, que pode não estar\ninstalada.\n• (c) Está incorreta: o PHP suporta POST, PUT, DELETE etc.\n• (d) http_build_query() apenas gera a string de parâmetros, mas não envia a\nrequisição.\n Portanto, a forma correta é  file_get_contents().\n$data = http_build_query(['foo' => 'bar']);\n$options = [\n    'http' => [\n        'method'  => 'POST',\n        'header'  => 'Content-type: application/x-www-form-\nurlencoded',\n        'content' => $data\n    ]\n];\n$context = stream_context_create($options);\n$result = file_get_contents('https://example.com/api', false,\n$context);",
+    "options": [
+      {
+        "text": "file_get_contents()",
+        "correct": true
+      },
+      {
+        "text": "curl_exec()",
+        "correct": false
+      },
+      {
+        "text": "PHP only supports GET requests",
+        "correct": false
+      },
+      {
+        "text": "http_build_query()",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q4] Which of these approaches is recommended to protect a web site against Cross-Site\nRequest Forgery (CSRF)? (Choose 2)",
+    "explanation": "Use the SameSite flag for cookies.\nb) Add an additional token to the HTTP request.\nO ataque CSRF (Cross-Site Request Forgery) explora o fato de que o navegador envia\nautomaticamente cookies de autenticação para um site alvo. Para se proteger, as duas\nmedidas mais eficazes são:\n1. SameSite cookies: Ao configurar o cookie de sessão com a flag\nSameSite=Strict ou SameSite=Lax, o navegador bloqueia o envio automático\ndesses cookies quando a requisição vem de um site diferente, reduzindo a\nsuperfície de ataque.\n2. CSRF Token (anti-CSRF token): Consiste em adicionar um token secreto e\nimprevisível em cada requisição sensível (geralmente via campo oculto em\nformulários ou header customizado). Esse token precisa ser validado no servidor,\nimpedindo que um atacante consiga forjar a requisição.\n• (c) Validar IP não é uma defesa confiável, pois usuários podem ter IP dinâmico ou\ncompartilhar IP.\n• (d) Usar apenas POST não previne CSRF, já que o ataque pode enviar POSTs\nmaliciosos.\n• (e) Desabilitar sessões não faz sentido, pois inviabilizaria autenticação de usuários.\n Portanto, as respostas corretas são  (a) e (b).",
+    "options": [
+      {
+        "text": "Use the SameSite flag for cookies.",
+        "correct": true
+      },
+      {
+        "text": "Add an additional token to the HTTP request.",
+        "correct": true
+      },
+      {
+        "text": "Validate the IP address of the user.",
+        "correct": false
+      },
+      {
+        "text": "Use POST instead of GET.",
+        "correct": false
+      },
+      {
+        "text": "Disable sessions.",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q5] Which of the following tasks can be achieved by using magic methods? (Choose 3)",
+    "explanation": "Processing access to undefined methods or properties.\nc) Inicialização/“desinicialização” do objeto.\ne) Converting objects to string representation.\nb) Processar acesso a métodos ou propriedades indefinidos.\nEm PHP, os métodos mágicos __get(), __set(), __isset(), __unset(), __call()\ne __callStatic() permitem interceptar acessos a propriedades/métodos inexistentes,\nalterando o comportamento padrão do objeto.\nc) Inicialização/“desinicialização” do objeto.\nA inicialização é feita por __construct() e a “desinicialização”/finalização por\n__destruct(). Ambos são métodos mágicos e se enquadram no que a alternativa\ndescreve.\ne) Converter objetos para string.\n__toString() define a representação textual do objeto quando este é convertido para\nstring.\nPor que as demais estão incorretas:\n• a) Criar objeto iterável.\nNão existe método mágico __iterable nem __getIterator() em PHP.\nIteração é feita implementando Iterator/IteratorAggregate (com getIterator()\nsem __) ou outras interfaces de iteração — não é magic method.\n• d) Criar stream wrapper.\nStream wrappers são registrados com stream_wrapper_register() e funções\ncorrelatas, não via métodos mágicos.\n• f) Sobrecarga de operadores.\nPHP não suporta sobrecarga de operadores (como +) via magic methods (diferente\nde C++/Python).\n Portanto, as três corretas são  (b), (c) e (e).",
+    "options": [
+      {
+        "text": "Creating an iterable object.",
+        "correct": false
+      },
+      {
+        "text": "Processing access to undefined methods or properties.",
+        "correct": true
+      },
+      {
+        "text": "Initializing or uninitializing object data.",
+        "correct": true
+      },
+      {
+        "text": "Creating a new stream wrapper.",
+        "correct": false
+      },
+      {
+        "text": "Converting objects to string representation.",
+        "correct": true
+      },
+      {
+        "text": "Overloading operators like +, *, etc.",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q6] What is the output of the following code?\n\nnamespace MyNamespace;\nclass Test {\n}\necho Test::class;",
+    "explanation": "Em PHP, o operador ::class retorna o nome totalmente qualificado da classe (Fully\nQualified Class Name - FQCN).\n• Como a classe Test foi declarada dentro do namespace MyNamespace, o valor\nretornado será:\nMyNamespace\\Test\n• (a) Não ocorre parse error, pois a sintaxe é válida.\n• (b) Não resulta em string vazia.\n• (d) Test seria o retorno apenas se a classe estivesse no namespace global (sem\nnamespace).\n Portanto, a saída correta é  MyNamespace\\Test.",
+    "options": [
+      {
+        "text": "parse error",
+        "correct": false
+      },
+      {
+        "text": "empty string",
+        "correct": false
+      },
+      {
+        "text": "MyNamespace\\Test",
+        "correct": true
+      },
+      {
+        "text": "Test",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q7] Which of the following is a package manager that allows adding dependencies to a PHP\nproject?",
+    "explanation": "O Composer é o gerenciador de dependências oficial do PHP, permitindo declarar\nbibliotecas externas no arquivo composer.json e instalá-las automaticamente no\nprojeto. Ele resolve versões, instala pacotes do Packagist e facilita o autoload.\n• (a) PHAR é um formato de empacotamento de aplicações PHP em um único\narquivo, não um gerenciador de dependências.\n• (c) Maven é um gerenciador de dependências e build, mas específico para Java,\nnão PHP.\n• (d) TAR é apenas um formato de arquivo compactado, sem controle de\ndependências.\n Portanto, o gerenciador correto para PHP é o  Composer.",
+    "options": [
+      {
+        "text": "PHAR",
+        "correct": false
+      },
+      {
+        "text": "Composer",
+        "correct": true
+      },
+      {
+        "text": "Maven",
+        "correct": false
+      },
+      {
+        "text": "TAR",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q8] Your User class has a $role property. All code working with an instance of that class shall be able to retrieve the property’s value, but only the class itself must be allowed to change it. Which snippet is correct in PHP 8.4 asymmetric visibility?",
+    "explanation": "No PHP 8.4, leitura pública e escrita privada usa `public private(set) string $role`.",
+    "options": [
+      {
+        "text": "class User { public private(set) string $role; }",
+        "correct": true
+      },
+      {
+        "text": "class User { private public(get) string $role; }",
+        "correct": false
+      },
+      {
+        "text": "class User { public private string $role; }",
+        "correct": false
+      },
+      {
+        "text": "class User { public(get) private(set) string $role; }",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q9] What is the benefit of using persistent database connections in PHP? (Choose 2)",
+    "explanation": "Allows connection settings such as character set encoding to be remembered\nafter a PHP script ends.\nd) Reduces the connection & authentication overhead of connecting to the\ndatabase.\nAs conexões persistentes em PHP (via PDO ou mysqli com p:host) não são\nfechadas quando o script termina; elas permanecem abertas e são reutilizadas por futuros\nscripts do mesmo processo. Isso traz benefícios:\n• (a) As configurações de conexão (ex.: charset, collation, modos de SQL)\npermanecem ativas entre requisições, evitando necessidade de reconfigurar toda\nvez.\n• (d) Evita o custo de abrir e autenticar uma nova conexão a cada requisição, o que\nmelhora desempenho em sistemas com alta carga.\n ❌ (b) Transações não podem ser retomadas entre requisições; elas são encerradas\nquando o script termina.\n ❌ (c) Não garante uma única conexão global — cada processo pode reutilizar várias\nconexões conforme necessário.\n Portanto, as respostas corretas são  (a) e (d).",
+    "options": [
+      {
+        "text": "Allows connection settings such as character set encoding to be remembered after a\nPHP script ends.",
+        "correct": true
+      },
+      {
+        "text": "Allows for resumption of transactions across multiple requests.",
+        "correct": false
+      },
+      {
+        "text": "Ensures that only a single connection is open to the database from PHP.",
+        "correct": false
+      },
+      {
+        "text": "Reduces the connection & authentication overhead of connecting to the database.",
+        "correct": true
+      }
+    ]
+  },
+  {
+    "prompt": "[Q10] Which regular expression will match each of these strings?",
+    "explanation": "As strings fornecidas representam números de telefone no formato americano com\ndiferentes separadores:\n• Parênteses ( )\n• Espaço \" \"\n• Hífen \"-\"\n• Ponto \".\"\nO regex deve:\n1. Capturar 3 dígitos iniciais (\\d{3}).\n2. Aceitar qualquer caractere único como separador (. no regex significa \"qualquer\ncaractere\").\n3. Capturar mais 3 dígitos.\n4. Outro separador.\n5. Mais 4 dígitos.\nLogo:\n• (a) usa .* no início, o que permitiria qualquer coisa antes dos dígitos → poderia\ncasar strings inválidas.\n• (b) idêntica à (d), mas o grupo não está corretamente delimitado.\n• (c) também permite qualquer coisa antes/depois, o que foge do padrão.\n• (d) é a correta, pois casa exatamente com os formatos mostrados.\n Portanto, a regex correta é  /^(\\d{3}).\\d{3}.\\d{4}$/.",
+    "options": [
+      {
+        "text": "/^.*\\d{3}.\\d{3}.\\d{4}$/",
+        "correct": false
+      },
+      {
+        "text": "/^(\\d{3}).\\d{3}.\\d{4}$/",
+        "correct": false
+      },
+      {
+        "text": "/^.*(\\d{3}.\\d{3}.\\d{4})$/",
+        "correct": false
+      },
+      {
+        "text": "/^(\\d{3}).\\d{3}.\\d{4}$/\n(000) 555-1234\n000 555 1234\n000-555-1234\n000.555.1234",
+        "correct": true
+      }
+    ]
+  },
+  {
+    "prompt": "[Q11] Table data (table name \"users\" with primary key \"id\"):\nPHP code (assume the PDO connection is correctly established):\n\n$dsn = 'mysql:host=localhost;dbname=exam';\n$user = 'username';\n$pass = '********';\n$pdo = new PDO($dsn, $user, $pass);\n$cmd = \"SELECT name, email FROM users LIMIT 1\";\n$stmt = $pdo->prepare($cmd);\n$stmt->execute();\n$result = $stmt->fetchAll(PDO::FETCH_BOTH);\n$row = $result[0];",
+    "explanation": "O método fetchAll(PDO::FETCH_BOTH) retorna os resultados tanto com índices\nnuméricos quanto associativos.\n• No SELECT name, email FROM users LIMIT 1, o primeiro registro retornado\né anna / alpha@example.com.\n• Assim, o array terá:\n• 0 => 'anna' (índice numérico da primeira coluna)\n• 'name' => 'anna' (índice associativo)\n• 1 => 'alpha@example.com' (índice numérico da segunda coluna)\n• 'email' => 'alpha@example.com' (índice associativo).\n Logo, a alternativa correta é a  (a).",
+    "options": [
+      {
+        "text": "The value of $row is array(0 => 'anna', 'name' => 'anna', 1 =>\n'alpha@example.com', 'email' => 'alpha@example.com').",
+        "correct": true
+      },
+      {
+        "text": "The value of $row is array('name' => 'anna', 'email' =>\n'alpha@example.com').",
+        "correct": false
+      },
+      {
+        "text": "The value of $row is array(0 => 'anna', 1 => 'alpha@example.com').",
+        "correct": false
+      },
+      {
+        "text": "The value of $result is array('anna' => 'alpha@example.com').\nid   name    email\n-----------------------------------\n1    anna    alpha@example.com\n2    betty   beta@example.org\n3    clara   gamma@example.net\n5    siggi   sigma@example.info",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q12] What is the output of the following code?\n\n$a = ['a', 'b' => 'c'];\necho property_exists((object) $a, 'a') ? 'true' : 'false';\necho '-';\necho property_exists((object) $a, 'b') ? 'true' : 'false';",
+    "explanation": "O array $a = ['a', 'b' => 'c']; ao ser convertido em objeto ((object) $a)\ntransforma suas chaves em propriedades do objeto.\n• O valor 'a' foi inserido sem chave explícita, então recebe a chave 0.\n→ O objeto terá a propriedade 0 (não 'a').\n→ property_exists((object)$a, 'a') retorna false.\n• O valor 'c' tem a chave explícita 'b'.\n→ O objeto terá a propriedade 'b'.\n→ property_exists((object)$a, 'b') retorna true.\n2. Portanto, a saída do código é:\nfalse-true\n Alternativa correta:  (d) false-true.",
+    "options": [
+      {
+        "text": "false-false",
+        "correct": false
+      },
+      {
+        "text": "true-false",
+        "correct": false
+      },
+      {
+        "text": "true-true",
+        "correct": false
+      },
+      {
+        "text": "false-true",
+        "correct": true
+      }
+    ]
+  },
+  {
+    "prompt": "[Q13] Which of the following PHP functions can be used to set the HTTP response code?\n(Choose 2)",
+    "explanation": "http_response_code()\ne) header()\nhttp_response_code(int $code): função nativa do PHP usada diretamente para\ndefinir o código de status HTTP.\nExemplo:\nhttp_response_code(404);\n• header(string $string): também pode definir o código HTTP enviando um\ncabeçalho apropriado, como:\nheader(\"HTTP/1.1 404 Not Found\");\n ❌ header_add() adiciona cabeçalhos HTTP adicionais, mas não define o status.\n ❌ http_set_status() não existe no PHP.\n ❌ http_header_set() também não existe.\n Portanto, as alternativas corretas são  (a) e (e).",
+    "options": [
+      {
+        "text": "http_response_code()",
+        "correct": true
+      },
+      {
+        "text": "header_add()",
+        "correct": false
+      },
+      {
+        "text": "http_set_status()",
+        "correct": false
+      },
+      {
+        "text": "http_header_set()",
+        "correct": false
+      },
+      {
+        "text": "header()",
+        "correct": true
+      }
+    ]
+  },
+  {
+    "prompt": "[Q14] You want to work with a class where you can set arbitrary properties. You end up with the following code:\n\nclass Person {\n}\n$person = new Person();\n$person->firstName = \"Jane\";\n$person->lastName = \"Doe\";\n\nWhen running this code, you notice that you get a deprecation notice on some systems, and you are anticipating that this code might not work at all in a future PHP version.\n\nWhich of these approaches does NOT allow you to fulfill your requirements while getting rid of the deprecation messages?",
+    "explanation": "Starting with PHP 8.2, creating dynamic properties on a user-defined class that does not declare them triggers a deprecation notice, and support may be removed in a future PHP version.\n\n(a) `dynamic class Person {}` is not valid PHP syntax. There is no `dynamic class` keyword, so this approach does not solve the problem.\n(b) `stdClass` always allows dynamic properties, so assigning `$person->firstName` / `$person->lastName` works without the deprecation.\n(c) Implementing `__get()` and `__set()` with an internal array stores arbitrary properties without creating real dynamic class properties.\n(d) The `#[\\AllowDynamicProperties]` attribute explicitly allows dynamic properties on that class and removes the deprecation notice.\n\nTherefore, (a) is the approach that does NOT fulfill the requirements.",
+    "options": [
+      {
+        "text": "Replace the class with:\n\ndynamic class Person {\n}",
+        "correct": true
+      },
+      {
+        "text": "Replace the class with stdClass:\n\n$person = new stdClass();\n$person->firstName = \"Jane\";\n$person->lastName = \"Doe\";",
+        "correct": false
+      },
+      {
+        "text": "Replace the class with magic methods:\n\nclass Person {\n    protected $properties = [];\n    public function __get($key) {\n        return $this->properties[$key] ?? null;\n    }\n    public function __set($key, $value) {\n        $this->properties[$key] = $value;\n    }\n}",
+        "correct": false
+      },
+      {
+        "text": "Allow dynamic properties explicitly:\n\n#[\\AllowDynamicProperties]\nclass Person {\n}",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q15] How can the id attribute of the second paragraph element from the XML string below be\nretrieved from the SimpleXML object found inside $xml?\n\n$xml->section->paragraph[1]['id']",
+    "explanation": "O XML começa em <document>, portanto, ao carregar com\nsimplexml_load_string(), o objeto raiz ($xml) é o elemento <document>.\n1. Dentro dele existe um <section>.\n2. Dentro da <section>, temos dois <paragraph>.\n• O primeiro é acessado com índice [0].\n• O segundo é acessado com índice [1].\nAssim, para obter o atributo id do segundo <paragraph>, usamos:\n$xml->section->paragraph[1]['id'];\n Alternativa correta:  (e).",
+    "options": [
+      {
+        "text": "$xml->foo->section->paragraph[1]['id']",
+        "correct": false
+      },
+      {
+        "text": "$xml->document->paragraph[2]['id']",
+        "correct": false
+      },
+      {
+        "text": "$xml->getElementById('2');",
+        "correct": false
+      },
+      {
+        "text": "$xml->document->section->paragraph[2]['id']",
+        "correct": false
+      },
+      {
+        "text": "<?xml version=\"1.0\"?>\n<document>\n    <section>\n        <paragraph id=\"1\">One</paragraph>\n        <paragraph id=\"2\">Two</paragraph>\n    </section>\n</document>",
+        "correct": true
+      }
+    ]
+  },
+  {
+    "prompt": "[Q16] What is the output of the following code?\n\nfunction increment ($val) {\n    $val = $val + 1;\n}\n$val = 1;\nincrement($val);\necho $val;",
+    "explanation": "Passagem por valor: a variável original permanece 1.",
+    "options": [
+      {
+        "text": "1",
+        "correct": true
+      },
+      {
+        "text": "2",
+        "correct": false
+      },
+      {
+        "text": "parse error",
+        "correct": false
+      },
+      {
+        "text": "null",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q17] What is the output of the following code?\n\n$a = [1, 2, 3] + [4, 5, 6, 7];\necho implode(', ', $a);",
+    "explanation": "No PHP, o operador + entre arrays não é soma, mas sim união de arrays:\n• Ele mantém as chaves e valores do primeiro array.\n• Só adiciona valores do segundo array quando as chaves não existem no primeiro.\n•\nPasso a passo:\n[1, 2, 3]       // equivale a [0 => 1, 1 => 2, 2 => 3]\n[4, 5, 6, 7]    // equivale a [0 => 4, 1 => 5, 2 => 6, 3 => 7]\n• Para as chaves 0, 1, 2, o PHP usa os valores do primeiro array (1, 2, 3).\n• A chave 3 só existe no segundo array, então é adicionada (7).\n•\nResultado final:\n[0 => 1, 1 => 2, 2 => 3, 3 => 7]\nAo aplicar implode(', ', $a) →\n1, 2, 3, 7\n Alternativa correta:  (b).",
+    "options": [
+      {
+        "text": "1, 2, 3, 4, 5, 6, 7",
+        "correct": false
+      },
+      {
+        "text": "1, 2, 3, 7",
+        "correct": true
+      },
+      {
+        "text": "4, 5, 6, 7",
+        "correct": false
+      },
+      {
+        "text": "5, 7, 9, 7",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q18] What is the output of the following code?\n\n$rnd = rand(1, 10);\n$category = match (true) {\n    $rnd <= 10 => 'high',\n    $rnd <= 6  => 'mid',\n    $rnd < 3   => 'low'\n};\necho $category;",
+    "explanation": "O rand(1, 10) gera um número entre 1 e 10.\n• O match(true) avalia as expressões na ordem.\n• A primeira condição é $rnd <= 10.\n• Como $rnd sempre está entre 1 e 10, essa condição será sempre\nverdadeira.\n• O match retorna imediatamente o valor da primeira condição verdadeira →\n'high'.\nAs outras condições ($rnd <= 6, $rnd < 3) nunca serão avaliadas.\n Portanto, o código sempre exibirá  high.",
+    "options": [
+      {
+        "text": "Always 'high'",
+        "correct": true
+      },
+      {
+        "text": "Always 'low'",
+        "correct": false
+      },
+      {
+        "text": "Fatal error",
+        "correct": false
+      },
+      {
+        "text": "Either 'high' or 'mid' or 'low', determined at random",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q19] Which of the following expressions will evaluate to a random value from an array below?",
+    "explanation": "(a) Correto → array_rand($array) retorna uma chave aleatória. Ao acessar\n$array[...], obtemos o valor correspondente, ou seja, um elemento aleatório do\narray.\n• (b) Inválido → array_values() não possui a flag ARRAY_RANDOM.\n• (c) shuffle($array) embaralha o array, mas não retorna o valor. Para pegar um\nvalor seria necessário acessar manualmente ($array[0]).\n• (d) array_rand($array) retorna apenas uma chave, não o valor.\n• (e) array_rand($array, 1) também retorna apenas uma chave (em formato\ndiferente, mas ainda não é o valor).\n Portanto, a única expressão que retorna diretamente um  valor aleatório é:\n$array[array_rand($array)];",
+    "options": [
+      {
+        "text": "$array[array_rand($array)];",
+        "correct": true
+      },
+      {
+        "text": "array_values($array, ARRAY_RANDOM);",
+        "correct": false
+      },
+      {
+        "text": "shuffle($array);",
+        "correct": false
+      },
+      {
+        "text": "array_rand($array);",
+        "correct": false
+      },
+      {
+        "text": "$array = [\"Sue\",\"Mary\",\"John\",\"Anna\"];",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q20] What is the most general PHP type to use in a catch block in order to catch all errors and\nexceptions?",
+    "explanation": "No PHP:\n• Antes do PHP 7, apenas Exception podia ser usado em catch.\n• A partir do PHP 7, foi introduzida a interface Throwable, que é a superinterface\nde:\n• Exception (erros lançados com throw new Exception()).\n• Error (erros fatais tratados como objetos, ex.: TypeError, ParseError,\netc.).\nPortanto:\n• Exception → só captura exceções, não erros fatais.\n• Error → só captura erros, não exceções.\n• ErrorException → é apenas uma classe específica usada em algumas\nconversões de erros, não cobre tudo.\n• Throwable → cobre todos os tipos lançáveis (erros e exceções).\n Assim, o tipo mais geral é  Throwable.",
+    "options": [
+      {
+        "text": "Exception",
+        "correct": false
+      },
+      {
+        "text": "Error",
+        "correct": false
+      },
+      {
+        "text": "Throwable",
+        "correct": true
+      },
+      {
+        "text": "ErrorException",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q21] What is the result of the following bitwise operation in PHP?",
+    "explanation": "O operador ^ em PHP é o XOR bit a bit.\n• Representação binária:\n• 1 = 01 (em binário de 2 bits)\n• 2 = 10\n• Aplicando XOR:\n01\n10\n--\n11\n• 11 em binário = 3 em decimal.\n Portanto, o resultado da expressão  1 ^ 2 é 3.",
+    "options": [
+      {
+        "text": "-1",
+        "correct": false
+      },
+      {
+        "text": "3",
+        "correct": true
+      },
+      {
+        "text": "4",
+        "correct": false
+      },
+      {
+        "text": "2",
+        "correct": false
+      },
+      {
+        "text": "1\n1 ^ 2",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q22] What purpose do namespaces fulfill?",
+    "explanation": "Namespaces em PHP não são uma alternativa a classes, nem melhoram performance.\n• O propósito principal é evitar conflitos de nomes entre classes, funções e\nconstantes, especialmente em projetos grandes ou que usam bibliotecas externas.\n• Isso equivale a fornecer um nível de encapsulamento lógico no código.\n Portanto, a alternativa correta é  Encapsulation (c).",
+    "options": [
+      {
+        "text": "Alternative to classes.",
+        "correct": false
+      },
+      {
+        "text": "Improved performance.",
+        "correct": false
+      },
+      {
+        "text": "Encapsulation.",
+        "correct": true
+      },
+      {
+        "text": "All of the above.",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q23] What is the output of the following code?\n\n$text = 'This is text';\n$text1 = <<<TEXT\n$text\nTEXT;\n$text2 = <<<TEXT\n$text1\nTEXT;\necho \"$text2\";",
+    "explanation": "$text = 'This is text';\n→ Variável simples.\n1. $text1 = <<<TEXT $text TEXT;\n→ Usando heredoc, o conteúdo é interpretado.\n→ Portanto, $text1 = \"This is text\".\n2. $text2 = <<<TEXT $text1 TEXT;\n→ Novamente heredoc, e $text1 é expandido.\n→ Assim, $text2 = \"This is text\".\n3. echo \"$text2\";\n→ Imprime o valor de $text2, que é:\nThis is text\n Alternativa correta:  (d) This is text.",
+    "options": [
+      {
+        "text": "$text2",
+        "correct": false
+      },
+      {
+        "text": "$text1",
+        "correct": false
+      },
+      {
+        "text": "$text",
+        "correct": false
+      },
+      {
+        "text": "This is text",
+        "correct": true
+      }
+    ]
+  },
+  {
+    "prompt": "[Q24] What is the output of the following code?\n\nclass a\n{\n    public $val;\n}\nfunction renderVal (a $a)\n{\n    if ($a) {\n        echo $a->val;\n    }\n}\nrenderVal(null);",
+    "explanation": "A função renderVal(a $a) define um type hint obrigatório: o parâmetro $a precisa\nser uma instância da classe a.\n• Quando chamamos renderVal(null), estamos passando null em vez de um\nobjeto da classe a.\n• No PHP (sem ?a ou = null no type hint), isso gera um TypeError em tempo de\nexecução:\nArgument 1 passed to renderVal() must be an instance of a,\nnull given\n• Portanto, não chega a executar o corpo da função, nem imprimir nada.\n Alternativa correta:  (a) An error, because null is not an instance of a.",
+    "options": [
+      {
+        "text": "An error, because null is not an instance of a.",
+        "correct": true
+      },
+      {
+        "text": "A syntax error in the function declaration line.",
+        "correct": false
+      },
+      {
+        "text": "Nothing, because a null value is being passed to renderVal().",
+        "correct": false
+      },
+      {
+        "text": "NULL",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q25] Which of these code snippets DO NOT write the exact content of the file source.txt to\ntarget.txt? (Choose 2)",
+    "explanation": "file_put_contents(\"target.txt\", join(file(\"source.txt\"), \"\\n\"));\nc) file_put_contents(\"target.txt\", fopen(\"source.txt\", \"r\"));\n(a) Correto → file_get_contents() lê todo o conteúdo do arquivo como string, e\nfwrite() grava exatamente esse conteúdo.\n• (b) Incorreto → file(\"source.txt\") já retorna as linhas com as quebras de\nlinha incluídas. Usar join(..., \"\\n\") insere quebras de linha adicionais,\nalterando o conteúdo original.\n• (c) Incorreto → fopen(\"source.txt\", \"r\") retorna um resource, não o\nconteúdo do arquivo. file_put_contents() não sabe como gravar isso\ncorretamente.\n• (d) Incorreto também em muitos cenários → readfile(\"source.txt\") escreve\no conteúdo diretamente na saída (stdout) e retorna o número de bytes lidos, que\nseria gravado em target.txt, não o conteúdo. (Mas como a questão pede\napenas 2, provavelmente o exame considera só b e c como inválidos).\n• (e) Correto → file_get_contents() lê todo o arquivo e\nfile_put_contents() grava exatamente esse conteúdo.\n Portanto, as duas que  não escrevem o conteúdo exato são: (b) e (c).",
+    "options": [
+      {
+        "text": "$handle = fopen(\"target.txt\", \"w+\");\nfwrite($handle, file_get_contents(\"source.txt\"));\nfclose($handle);",
+        "correct": false
+      },
+      {
+        "text": "file_put_contents(\"target.txt\", join(file(\"source.txt\"), \"\\n\"));",
+        "correct": true
+      },
+      {
+        "text": "file_put_contents(\"target.txt\", fopen(\"source.txt\", \"r\"));",
+        "correct": true
+      },
+      {
+        "text": "file_put_contents(\"target.txt\", readfile(\"source.txt\"));",
+        "correct": false
+      },
+      {
+        "text": "file_put_contents(\"target.txt\", file_get_contents(\"source.txt\"));",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q26] Is the following code vulnerable to SQL Injection?\n\n// assume $pdo is a valid PDO connection\n$age  = $pdo->quote((int) $age);\n$name = $pdo->quote($name);\n$query = \"SELECT * FROM users WHERE name LIKE\n'$name' AND age = $age\";\n$result = $pdo->query($query);",
+    "explanation": "O código utiliza $pdo->quote(), que escapa corretamente strings, adicionando aspas e\ntratando caracteres perigosos ($name).\n• Para $age, é feito um cast explícito para inteiro ((int)$age) antes de chamar\nquote(), garantindo que não haja injeção via esse parâmetro.\n• Assim, tanto $name quanto $age são devidamente protegidos contra SQL\nInjection.\n Apesar disso, ⚠️ a prática recomendada seria usar prepared statements com\nplaceholders (? ou :param), ao invés de interpolar strings manualmente.\n Mas de acordo com a questão, a resposta correta é:\n(d) No, the code is fully protected from SQL Injection.",
+    "options": [
+      {
+        "text": "Yes, because the $name variable is improperly escaped.",
+        "correct": false
+      },
+      {
+        "text": "Yes, because even though $age and $name are escaped, nothing prevents their\ncontents from modifying the SQL.",
+        "correct": false
+      },
+      {
+        "text": "Yes, because the $age variable is improperly escaped.",
+        "correct": false
+      },
+      {
+        "text": "No, the code is fully protected from SQL Injection.",
+        "correct": true
+      },
+      {
+        "text": "Yes, because you cannot prevent SQL Injection when using PDO.",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q27] Which of the following does NOT help to protect against session hijacking and fixation\nattacks?",
+    "explanation": "(a) Corrigir falhas de XSS ajuda a proteger sessões, pois impede que o cookie de sessão\nseja roubado via script malicioso.\n• (b) Usar HTTPS com flag secure garante que o cookie de sessão só seja\ntransmitido por conexões seguras, protegendo contra sniffing.\n• (c) session.use_only_cookies = 1 evita que o ID da sessão seja passado\npela URL, reduzindo risco de fixation e exposição de sessão.\n• (d) session.cookie_lifetime = 0 apenas faz o cookie durar até o\nfechamento do navegador, o que não protege contra hijacking ou fixation.\n• (e) session_regenerate_id() é a medida essencial para prevenir session\nfixation, pois gera um novo ID de sessão após login/logout.\n Logo, a alternativa que  não ajuda é:\n(d) Set the session.cookie_lifetime php.ini parameter to 0.",
+    "options": [
+      {
+        "text": "Protect against XSS vulnerabilities in the application.",
+        "correct": false
+      },
+      {
+        "text": "Use HTTPS and set the secure cookie flag.",
+        "correct": false
+      },
+      {
+        "text": "Set the session.use_only_cookies php.ini parameter to 1.",
+        "correct": false
+      },
+      {
+        "text": "Set the session.cookie_lifetime php.ini parameter to 0.",
+        "correct": true
+      },
+      {
+        "text": "Rotate the session id on successful login and logout using\nsession_regenerate_id().",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q28] Are PHP constants case-sensitive?",
+    "explanation": "No PHP moderno (>= 7.3), todas as constantes definidas com define() ou const são\nsempre sensíveis a maiúsculas e minúsculas.\n• Versões antigas de PHP permitiam definir constantes case-insensitive passando\num terceiro parâmetro para define(), mas esse comportamento foi\ndescontinuado e removido.\n• Portanto, atualmente todas as constantes são case-sensitive.\n Resposta correta:  (d) Yes, they are always case-sensitive.",
+    "options": [
+      {
+        "text": "They are not by default, but it is possible to create case-sensitive constants.",
+        "correct": false
+      },
+      {
+        "text": "No, they are always case-insensitive.",
+        "correct": false
+      },
+      {
+        "text": "They are by default, but it is possible to create case-insensitive constants.",
+        "correct": false
+      },
+      {
+        "text": "Yes, they are always case-sensitive.",
+        "correct": true
+      }
+    ]
+  },
+  {
+    "prompt": "[Q29] What is the output of the following code?\n\necho \"22\" + \"0.2\", 23 . 1;",
+    "explanation": "\"22\" + \"0.2\"\n• O operador + força conversão numérica.\n• \"22\" → 22\n• \"0.2\" → 0.2\n• Resultado: 22 + 0.2 = 22.2\n2. 23 . 1\n• O operador . é concatenação de strings.\n• 23 . 1 → \"231\"\n3. O echo tem dois argumentos separados por vírgula:\necho 22.2, \"231\";\nIsso resulta em:\n22.2231\nMas atenção: o echo coloca vírgula entre os argumentos somente na sintaxe da\nquestão, mas na saída real do PHP ele imprime sequencialmente → 22.2231.\n A alternativa que corresponde é:\n(b) 22.2,231\n(embora na prática a saída exibida seria 22.2231, o exame está tratando o , como\nseparador de argumentos na alternativa).",
+    "options": [
+      {
+        "text": "56.2",
+        "correct": false
+      },
+      {
+        "text": "22.2,231",
+        "correct": true
+      },
+      {
+        "text": "22.2231",
+        "correct": false
+      },
+      {
+        "text": "220.2231",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q30] What are two reasons to use POST instead of GET when submitting a form? (Choose 2)",
+    "explanation": "A much higher content size restriction.\nd) Possibility to upload files.\n(a) Correto → O método GET tem limites de tamanho (dependendo do\nnavegador/servidor, geralmente até ~2.048 caracteres). O método POST permite enviar\nmuito mais dados.\n• (b) Incorreto → POST não protege contra CSRF. A prevenção de CSRF exige\ntokens de segurança, não depende do método HTTP.\n• (c) Incorreto → POST não criptografa automaticamente os dados. Para\ncriptografia é necessário usar HTTPS.\n• (d) Correto → Upload de arquivos (<input type=\"file\">) só é possível com o\nmétodo POST e o atributo enctype=\"multipart/form-data\".\n Portanto, os dois motivos válidos são:  (a) e (d).",
+    "options": [
+      {
+        "text": "A much higher content size restriction.",
+        "correct": true
+      },
+      {
+        "text": "Protection from Cross-Site Request Forgery.",
+        "correct": false
+      },
+      {
+        "text": "POST requests can automatically encrypt data.",
+        "correct": false
+      },
+      {
+        "text": "Possibility to upload files.",
+        "correct": true
+      }
+    ]
+  },
+  {
+    "prompt": "[Q31] What function is best suited for extracting data from a formatted string into an array?",
+    "explanation": "fgetcsv() → é usado para ler linhas de um arquivo CSV, convertendo cada linha em\narray. Não serve para parsing genérico de string formatada.\n• strtok() → quebra strings em tokens baseado em delimitadores, mas não\nentende formatos estruturados.\n• sprintf() → é usado para formatar strings, não para extrair dados delas.\n• sscanf() → é a função que lê dados de uma string formatada e os extrai em\nvariáveis ou arrays, sendo o equivalente de scanf() para strings.\n Portanto, a resposta correta é:  sscanf() (d).",
+    "options": [
+      {
+        "text": "fgetcsv()",
+        "correct": false
+      },
+      {
+        "text": "strtok()",
+        "correct": false
+      },
+      {
+        "text": "sprintf()",
+        "correct": false
+      },
+      {
+        "text": "sscanf()",
+        "correct": true
+      }
+    ]
+  },
+  {
+    "prompt": "[Q32] Which of the following expressions generate a value that is different from the others?",
+    "explanation": "(a) explode(',', 'one,two,three') produces ['one', 'two', 'three'] with keys 0, 1, 2.\n(b) array('one', 'two', 'three') produces the same indexed array (['one', 'two', 'three'] with keys 0, 1, 2).\n(c) ['one', 'two', 'three'] is the short-array syntax equivalent of (b), so the result is identical.\n(d) [1 => 'one', 2 => 'two', 3 => 'three'] also contains the same values, but the keys start at 1 instead of 0. In PHP, arrays with different keys are not equal (for example with == / === comparisons).\n\nTherefore, (d) is the expression that generates a different value.",
+    "options": [
+      {
+        "text": "explode(',', 'one,two,three')",
+        "correct": false
+      },
+      {
+        "text": "array('one', 'two', 'three')",
+        "correct": false
+      },
+      {
+        "text": "['one', 'two', 'three']",
+        "correct": false
+      },
+      {
+        "text": "[1 => 'one', 2 => 'two', 3 => 'three']",
+        "correct": true
+      }
+    ]
+  },
+  {
+    "prompt": "[Q33] Which of these PHP values may NOT be encoded to a JavaScript literal using PHP's\next/json capabilities?",
+    "explanation": "O json_encode() em PHP pode transformar valores strings, arrays indexados e\narrays associativos em equivalentes JSON (strings, arrays e objetos).\n• (a) 'Hello, world!' → vira \"Hello, world!\".\n• (b) ['Hello, world!'] → vira [\"Hello, world!\"].\n• (d) ['message' => 'Hello, world!'] → vira {\"message\": \"Hello,\nworld!\"}.\n• (c) Uma função não pode ser serializada em JSON, já que JSON não tem\nsuporte a funções/closures.\n Portanto, a alternativa que  não pode ser codificada em JSON é:\n(c) function(){ alert(\"Hello, world!\"); }.",
+    "options": [
+      {
+        "text": "(alternativa a)",
+        "correct": false
+      },
+      {
+        "text": "(alternativa b)",
+        "correct": false
+      },
+      {
+        "text": "(alternativa c)",
+        "correct": true
+      },
+      {
+        "text": "'Hello, world!'\n['Hello, world!']\nfunction(){ alert(\"Hello, world!\"); }\n['message' => 'Hello, world!']",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q34] How can you define array constants with PHP?",
+    "explanation": "Desde o PHP 5.6, é possível usar const para definir array constants:\nconst FRUITS = ['apple', 'banana', 'orange'];\n• Desde o PHP 5.6 também, o define() passou a aceitar arrays:\ndefine('FRUITS', ['apple', 'banana', 'orange']);\n• Portanto, tanto const quanto define() podem ser usados para definir constantes\nde array.\n Resposta correta:  (a) With const and define().",
+    "options": [
+      {
+        "text": "With const and define().",
+        "correct": true
+      },
+      {
+        "text": "Only with const.",
+        "correct": false
+      },
+      {
+        "text": "Only primitive types may be used for constants.",
+        "correct": false
+      },
+      {
+        "text": "Only with define().",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q35] What will the following code print out?\n\n$str = '  one of the following';✓\necho str_replace(' ', 'Check', $str);✓",
+    "explanation": "A string original é:\n one of the following✓\n• O str_replace(' ', 'Check', $str)✓  substitui o caractere ✓ pela palavra\n\"Check\".\n• Resultado final:\nCheck one of the following\n Portanto, a saída será:  \"Check one of the following\".",
+    "options": [
+      {
+        "text": "Check one of the following",
+        "correct": true
+      },
+      {
+        "text": "one of the following✓",
+        "correct": false
+      },
+      {
+        "text": "one of the following",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q36] The class Person should have the two protected properties lastName and\nfirstName. The class should allow setting both properties upon object instantiation. You\nwant to write as little code as possible to achieve this.\nWhich of the following approaches satisfies these requirements?\n\nparent::__construct();\n    }\n}\nclass Person {\n    public function __construct($firstName, $lastName) {\n        $this->firstName = $firstName;\n        $this->lastName = $lastName;\n    }\n}\nclass Person {\n    public function __construct(protected string $firstName,\nprotected string  $lastName) {\n    }\n}\nclass Person {\n    public function __construct(protected $firstName: string,\nprotected $lastName: string) {\n    }\n}",
+    "explanation": "A alternativa (c) usa promoção de propriedades no construtor (PHP 8+): declara e\ninicializa as propriedades protected diretamente nos parâmetros (protected string\n$firstName, protected string $lastName) com o menor código possível.\n• (a) Declara as propriedades, mas não as inicializa; o parent::__construct() é\nirrelevante aqui.\n• (b) Inicializa, porém não declara as propriedades como protected (criaria\npropriedades dinâmicas — comportamento desaconselhado/depreciado).\n• (d) Sintaxe inválida em PHP (usa nome: tipo em vez de tipo $nome).\n Resposta correta:  (c).",
+    "options": [
+      {
+        "text": "protected $firstName;",
+        "correct": false
+      },
+      {
+        "text": "protected $lastName;",
+        "correct": false
+      },
+      {
+        "text": "public function __construct($firstName, $lastName) {",
+        "correct": true
+      },
+      {
+        "text": "class Person {",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q37] How many elements does the array $matches from the following code contain?\n\n$str = \"The cat sat on the roof of their house.\";\n$matches = preg_split('/(the)/i', $str, -1,\nPREG_SPLIT_DELIM_CAPTURE);",
+    "explanation": "A regex / (the) /i divide a string em cada ocorrência de \"the\" (case-insensitive).\n• PREG_SPLIT_DELIM_CAPTURE faz com que o delimitador capturado (the)\ntambém seja incluído no array.\nString:\n\"The cat sat on the roof of their house.\"\nOcorrências de \"the\":\n1. \"The\" (início da string)\n2. \"the\" (em \"the roof\")\n3. \"the\" (em \"their\")\nArray final\n[\n  \"\",\n  \"The\",\n  \" cat sat on \",\n  \"the\",\n  \" roof of \",\n  \"the\",\n  \"ir house.\"\n]\nNúmero de elementos: 7\n  Portanto, a resposta correta é d) 7, pois o preg_split com\nPREG_SPLIT_DELIM_CAPTURE inclui também as ocorrências do delimitador capturado,\nresultando em 7 elementos no array.",
+    "options": [
+      {
+        "text": "2",
+        "correct": false
+      },
+      {
+        "text": "9",
+        "correct": false
+      },
+      {
+        "text": "3",
+        "correct": false
+      },
+      {
+        "text": "7",
+        "correct": true
+      },
+      {
+        "text": "4",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q38] What is the output of the following code?\n\nclass Bar {\n    private $a = 'b';\n    public $c = 'd';\n}\n$x = (array) new Bar();\necho array_key_exists('a', $x) ? 'true' : 'false';\necho '-';\necho array_key_exists('c', $x) ? 'true' : 'false';",
+    "explanation": "Quando um objeto é convertido em array em PHP:\n• Propriedades públicas aparecem normalmente com sua chave de nome.\n• Propriedades privadas aparecem com um nome modificado:\n\"\\0ClassName\\0propertyName\" (ou seja, não acessíveis diretamente pelo\nnome original).\n• Portanto:\n• O private $a NÃO aparece como chave 'a', mas sim \"\\0Bar\\0a\". Logo:\narray_key_exists('a', $x) → false\n• O public $c aparece como 'c'. Logo:\narray_key_exists('c', $x) → true\n  b) false-true",
+    "options": [
+      {
+        "text": "true-false",
+        "correct": false
+      },
+      {
+        "text": "false-true",
+        "correct": true
+      },
+      {
+        "text": "false-false",
+        "correct": false
+      },
+      {
+        "text": "true-true",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q39] Consider the following code:\nWhich of the following commands will output \"PHP\"?\n\necho strval($lang);\necho $lang->toString();",
+    "explanation": "$xml->xpath('//language') retorna um array de nós encontrados.\n• Portanto, $lang é um array contendo objetos SimpleXMLElement.\n• Para acessar o valor \"PHP\", é preciso pegar o primeiro elemento do array:\necho $lang[0];  // imprime \"PHP\"\n• echo $lang; → erro, pois $lang é array.\n• strval($lang) → erro, não pode converter array diretamente em string.\n• $lang->toString() → não existe esse método.\n  a) echo $lang[0];",
+    "options": [
+      {
+        "text": "$lang = $xml->xpath('//language');",
+        "correct": true
+      },
+      {
+        "text": "echo $lang[0];",
+        "correct": false
+      },
+      {
+        "text": "echo $lang;",
+        "correct": false
+      },
+      {
+        "text": "$xml = simplexml_load_string('<?xml version=\"1.0\" ?\n><root><language>PHP</language></root>');",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q40] What can prevent PHP from being able to open a file on the hard drive? (Choose 2)",
+    "explanation": "File is outside of open_basedir.\nd) File system permissions.\na) Estar dentro de /tmp não impede PHP de abrir arquivos (a não ser por permissões\nespecíficas). ❌\n• b) O modo CGI não impede PHP de abrir arquivos do disco. ❌\n• c) O diretório open_basedir restringe o acesso do PHP a arquivos fora do\ncaminho configurado.\n• d) Permissões do sistema de arquivos (Unix/Linux/Windows) podem impedir\nleitura/escrita mesmo que o caminho seja válido.\n  c) File is outside of open_basedir.\n  d) File system permissions.\nPortanto, apenas open_basedir e permissões do sistema de arquivos podem bloquear\no acesso do PHP a arquivos.",
+    "options": [
+      {
+        "text": "File is inside the /tmp directory.",
+        "correct": false
+      },
+      {
+        "text": "PHP is running in CGI mode.",
+        "correct": false
+      },
+      {
+        "text": "File is outside of open_basedir.",
+        "correct": true
+      },
+      {
+        "text": "File system permissions.",
+        "correct": true
+      }
+    ]
+  },
+  {
+    "prompt": "[Q41] What is the output of the following code?\n\n<?php\ndeclare(strict_types=1);\nfunction add (int $a, int $b) {\n    return $a + $b;\n}\ntry {\n    echo add(1, 2.0);\n} catch (Exception $ex) {\n    echo 'Exception';\n} catch (Error $err) {\n    echo 'Error';\n} catch (Throwable $e) {\n    echo 'Throwable';\n}",
+    "explanation": "declare(strict_types=1); ativa tipagem estrita em PHP.\n• A função add(int $a, int $b) espera dois inteiros.\n• Na chamada add(1, 2.0):\n• O primeiro argumento 1 é válido (inteiro).\n• O segundo argumento 2.0 é um float, e não será convertido implicitamente\npara int por causa da tipagem estrita.\n• Isso gera um TypeError, que é uma subclasse de Error.\n• Fluxo do try/catch:\n• Não é capturado por catch (Exception ...) (pois TypeError não é\nException).\n• É capturado em catch (Error $err) → imprime \"Error\".\n  c) Error",
+    "options": [
+      {
+        "text": "Exception",
+        "correct": false
+      },
+      {
+        "text": "3",
+        "correct": false
+      },
+      {
+        "text": "Error",
+        "correct": true
+      },
+      {
+        "text": "Throwable",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q42] What is the purpose of the never return type?",
+    "explanation": "O tipo never foi introduzido no PHP 8.1.\n• Ele é usado para indicar que uma função não retornará nunca um valor — ou\nseja, ela não termina normalmente.\n• Exemplos típicos: funções que sempre lançam exceções ou chamam exit().\nPortanto:\n• a) Incorreto → não tem relação com ausência de restrição de tipo.\n• b) Incorreto → refere-se a variáveis, não a funções.\n• c) Correto  → significa que a função nunca retorna valor.\n• d) Incorreto → a função pode rodar, mas nunca retorna.\n  c) It indicates that a function will never return a value.",
+    "options": [
+      {
+        "text": "It indicates that there will never be a type restriction on the value that the function\nreturns.",
+        "correct": false
+      },
+      {
+        "text": "It indicates that a variable will never have a value.",
+        "correct": false
+      },
+      {
+        "text": "It indicates that a function will never return a value.",
+        "correct": true
+      },
+      {
+        "text": "It indicates that a function will never be run.",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q43] Given a PHP value, which of these code samples shows how to convert the value to\nJSON?\n\n$string = $value->__toJson();\n$string = json_encode($value);",
+    "explanation": "Em PHP, a forma correta e nativa de converter valores para JSON é usando\njson_encode().\n• As demais alternativas (Json::encode, __toString, __toJson) não existem\nna biblioteca padrão do PHP.\nResposta correta\n  d) $string = json_encode($value);",
+    "options": [
+      {
+        "text": "$json = new Json($value);",
+        "correct": false
+      },
+      {
+        "text": "$string = $json->__toString();",
+        "correct": false
+      },
+      {
+        "text": "$value = (object) $value;",
+        "correct": false
+      },
+      {
+        "text": "$string = Json::encode($value);",
+        "correct": true
+      }
+    ]
+  },
+  {
+    "prompt": "[Q44] What is the output of the following code?",
+    "explanation": "O array original é:\n$a = [\n  0 => 'apples',\n  1 => 'bananas',\n  2 => 'clementines'\n];\nQuando executamos unset($a[1]);, o elemento de índice 1 ('bananas') é removido.\nO unset não reindexa o array automaticamente, ele apenas remove a posição\nespecificada, preservando os demais índices.\nAssim, o array resultante será:\nArray\n(\n    [0] => apples\n    [2] => clementines\n)\n Portanto, a saída correta é a alternativa  b.",
+    "options": [
+      {
+        "text": "(alternativa a)",
+        "correct": false
+      },
+      {
+        "text": "(alternativa b)",
+        "correct": true
+      },
+      {
+        "text": "(alternativa c)",
+        "correct": false
+      },
+      {
+        "text": "$a = ['apples', 'bananas', 'clementines'];\nunset($a[1]);\nprint_r($a);\nArray\n(\n    [1] => apples\n    [2] => clementines\n)\nArray\n(\n    [0] => apples\n    [2] => clementines\n)\nArray\n(\n    [0] => apples\n    [1] =>\n    [2] => clementines\n)\nArray\n(\n    [0] => apples\n    [1] => clementines\n)",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q45] Consider the following table data and PHP code. What’s the outcome?\nTable data (table name \"users\" with primary key \"id\"):\nPHP code (assume the PDO connection is correctly established):\n\n$dsn  = 'mysql:host=localhost;dbname=exam';\n$user = 'username';\n$pass = '********';\n$pdo  = new PDO($dsn, $user, $pass);\ntry {\n    $cmd  = \"INSERT INTO users (id, name, email) VALUES\n(:id, :name, :email)\";\n    $stmt = $pdo->prepare($cmd);\n    $stmt->bindValue(':id', 1);\n    $stmt->bindValue(':name', 'anna');\n    $stmt->bindValue(':email', 'alpha@example.com');\n    $stmt->execute();\n    echo \"Success!\";\n} catch (PDOException $e) {\n    echo \"Failure!\";\n    throw $e;\n}",
+    "explanation": "A tabela já possui o registro com id = 1 (e inclusive os mesmos name e email). Inserir\nnovamente com id = 1 causa violação de chave primária → o INSERT falha.\n• No código, não foi definido PDO::ATTR_ERRMODE =\nPDO::ERRMODE_EXCEPTION. O comportamento padrão do PDO é\nERRMODE_SILENT (silencioso): execute() retorna false, não lança exceção\ne não emite warning por padrão.\n• Como o try/catch só captura exceções, nada é capturado e o código segue\npara echo \"Success!\";.\n Portanto, alternativa  a.",
+    "options": [
+      {
+        "text": "The INSERT will fail because of a primary key violation, and the user will see the\n\"Success!\" message.",
+        "correct": true
+      },
+      {
+        "text": "The INSERT will succeed and the user will see the \"Success!\" message.",
+        "correct": false
+      },
+      {
+        "text": "The INSERT will fail because of a primary key violation, and the user will see a PDO\nwarning message.",
+        "correct": false
+      },
+      {
+        "text": "The INSERT will fail because of a primary key violation, and the user will see the\n\"Failure!\" message.\nid  name   email\n1   anna   alpha@example.com\n2   betty  beta@example.org\n3   clara  gamma@example.net\n5   sue    sigma@example.info",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q46] What is the output of the following code?\n\nfunction increment ($val) {\n    ++$val;\n}\n$val = 1;\nincrement ($val);\necho $val;",
+    "explanation": "Passagem por valor: a variável externa continua 1.",
+    "options": [
+      {
+        "text": "1",
+        "correct": true
+      },
+      {
+        "text": "2",
+        "correct": false
+      },
+      {
+        "text": "parse error",
+        "correct": false
+      },
+      {
+        "text": "undefined variable",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q47] The following form is loaded in a recent browser. The user selects the second option and\nsubmits the form:\nIn the server-side PHP code to deal with the form data, what is the value of\n$_POST['list']?",
+    "explanation": "Quando os elementos <option> de um <select> não têm o atributo value definido,\no navegador envia o conteúdo textual da opção como valor do campo no formulário.\n• O usuário selecionou a segunda opção (<option>two</option>).\n• Como não existe value=\"alguma_coisa\", o valor enviado será a string \"two\".\n Portanto, ao acessar  $_POST['list'], o PHP receberá \"two\".",
+    "options": [
+      {
+        "text": "2",
+        "correct": false
+      },
+      {
+        "text": "1",
+        "correct": false
+      },
+      {
+        "text": "null",
+        "correct": false
+      },
+      {
+        "text": "two\n<form method=\"post\">\n  <select name=\"list\">\n    <option>one</option>\n    <option>two</option>\n    <option>three</option>\n  </select>\n</form>",
+        "correct": true
+      }
+    ]
+  },
+  {
+    "prompt": "[Q48] What are two differences between \"print\" and \"echo\"? (Choose 2)",
+    "explanation": "Print has a return value, echo does not.\nd) Echo can accept multiple arguments, print does not.\nReturn value:\n• print retorna sempre 1, por isso pode ser usado em expressões.\n• echo não retorna valor.\n2. Múltiplos argumentos:\n• echo pode receber múltiplos argumentos, como echo \"A\", \"B\", \"C\";.\n• print só aceita um argumento.\n3. Buffering: Nenhum dos dois (echo ou print) faz buffering especial. Essa parte é\nresponsabilidade do sistema de saída do PHP, portanto as alternativas a e e estão\nincorretas.\nAssim, as duas diferenças reais são:\n  print tem valor de retorno, echo não.\n  echo aceita múltiplos argumentos, print não.",
+    "options": [
+      {
+        "text": "Echo buffers the output, while print does not.",
+        "correct": false
+      },
+      {
+        "text": "Print has a return value, echo does not.",
+        "correct": true
+      },
+      {
+        "text": "Print can accept multiple arguments, echo does not.",
+        "correct": false
+      },
+      {
+        "text": "Echo can accept multiple arguments, print does not.",
+        "correct": true
+      },
+      {
+        "text": "Print buffers the output, while echo does not.",
+        "correct": false
+      },
+      {
+        "text": "Echo has a return value, print does not.",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q49] Before the headers are sent, how can you remove a previously set header?",
+    "explanation": "die() apenas encerra a execução do script, mas não remove cabeçalhos já definidos.\n1. headers_list() serve apenas para listar os cabeçalhos definidos até o\nmomento, não remove nenhum.\n2. \"Not possible\" é incorreto, pois o PHP fornece a função específica para isso.\n3. header_remove() é a função correta — pode ser usada sem argumentos para\nremover todos os cabeçalhos pendentes, ou com o nome do cabeçalho para\nremover apenas aquele específico, desde que ainda não tenham sido enviados ao\ncliente.\n Portanto, a forma correta é  header_remove().",
+    "options": [
+      {
+        "text": "Use the die() function to abort the PHP script.",
+        "correct": false
+      },
+      {
+        "text": "Use the headers_list() function, providing the name of the header as the second\nargument.",
+        "correct": false
+      },
+      {
+        "text": "Not possible.",
+        "correct": false
+      },
+      {
+        "text": "Use the header_remove() function, providing the name of the header.",
+        "correct": true
+      }
+    ]
+  },
+  {
+    "prompt": "[Q50] What is the output of the following code?\n\nclass Base {\n    protected static function whoami() {\n        echo \"Base \";\n    }\n    public static function whoareyou() {\n        static::whoami();\n    }\n}\nclass A extends Base {\n    public static function test() {\n        Base::whoareyou();\n        self::whoareyou();\n        parent::whoareyou();\n        A::whoareyou();\n        static::whoareyou();\n    }\n    public static function whoami() {\n        echo \"A \";\n    }\n}\nclass B extends A {\n    public static function whoami() {\n        echo \"B \";\n    }\n}\nB::test();",
+    "explanation": "Analisando de novo: no ⚠️ passo 3 eu ajusto: parent::whoareyou() chama a\nimplementação de Base::whoareyou(), mas como dentro dela há\nstatic::whoami(), o late static binding continua válido e resolve para A (não para\nBase), porque foi chamado dentro de A.\n Correção:🔎\n• 1: Base\n• 2: A\n• 3: A\n• 4: A\n• 5: B\nSaída correta é:\n Alternativa correta:  d) Base B A A B está próxima, mas correta seria Base A A A B.",
+    "options": [
+      {
+        "text": "Base B B A B",
+        "correct": false
+      },
+      {
+        "text": "Base A Base A B",
+        "correct": true
+      },
+      {
+        "text": "B B B B B",
+        "correct": false
+      },
+      {
+        "text": "Base B A A B",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q51] Which class of HTTP status codes is used for server error conditions?",
+    "explanation": "2XX → indica sucesso (ex: 200 OK, 201 Created).\n• 3XX → indica redirecionamentos (ex: 301 Moved Permanently, 302 Found).\n• 4XX → indica erros do cliente (ex: 404 Not Found, 403 Forbidden).\n• 5XX → indica erros do servidor, quando o servidor não consegue processar a\nrequisição corretamente (ex: 500 Internal Server Error, 503 Service\nUnavailable).\n Resposta correta:  d) 5XX",
+    "options": [
+      {
+        "text": "2XX",
+        "correct": false
+      },
+      {
+        "text": "3XX",
+        "correct": false
+      },
+      {
+        "text": "4XX",
+        "correct": false
+      },
+      {
+        "text": "5XX",
+        "correct": true
+      }
+    ]
+  },
+  {
+    "prompt": "[Q52] Qual chave de $_FILES['campo'] contém o nome/caminho provisório do arquivo no servidor (provisional name)?",
+    "explanation": "`tmp_name` é o caminho temporário no servidor; `name` é o nome original do cliente.",
+    "options": [
+      {
+        "text": "name",
+        "correct": false
+      },
+      {
+        "text": "tmp_name",
+        "correct": true
+      },
+      {
+        "text": "tmp",
+        "correct": false
+      },
+      {
+        "text": "file",
+        "correct": false
+      },
+      {
+        "text": "path",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q53] How many times will the function counter() be executed in the following code?\n\nfunction counter($start, &$stop)\n{\n    if ($stop > $start) {\n        return;\n    }\n    counter($start--, ++$stop);\n}\n$start = 5;\n$stop = 2;\ncounter($start, $stop);",
+    "explanation": "Chamada inicial: counter(5, 2)\n• $stop (2) > $start (5)? Não\n• Faz counter($start--, ++$stop) → counter(5, 3) (porque\n$start-- passa 5 e depois vira 4).\n2. Segunda chamada: counter(5, 3)\n• $stop (3) > $start (5)? Não\n• Faz counter(5, 4) (start passa 5 e depois vira 4).\n3. Terceira chamada: counter(5, 4)\n• $stop (4) > $start (5)? Não\n• Faz counter(5, 5).\n4. Quarta chamada: counter(5, 5)\n• $stop (5) > $start (5)? Não\n• Faz counter(5, 6).\n5. Quinta chamada: counter(5, 6)\n• $stop (6) > $start (5)? Sim, então retorna.\nA função foi executada 5 vezes.\n Resposta correta:  a) 5",
+    "options": [
+      {
+        "text": "5",
+        "correct": true
+      },
+      {
+        "text": "6",
+        "correct": false
+      },
+      {
+        "text": "4",
+        "correct": false
+      },
+      {
+        "text": "3",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q54] Which of the following statements about anonymous functions in PHP are NOT true?\n(Choose 2)",
+    "explanation": "Anonymous functions created within object context are always bound to that\nobject.\nd) Assigning closure to a property of an object binds it to that object.\n(a) Verdadeiro: Closures em PHP podem ser associadas a objetos com bindTo.\n• (b) Verdadeiro: O bindTo/bind define o valor de $this e o escopo da função\nanônima.\n• (c) Falso: Funções anônimas criadas dentro do contexto de um objeto não são\nautomaticamente vinculadas ao objeto. É necessário fazer o bind manual.\n• (d) Falso: Apenas atribuir a closure a uma propriedade não faz o bind. Ela\ncontinua independente, a menos que seja usada com bind/bindTo.\n• (e) Verdadeiro: Os métodos bind() e bindTo() realmente criam novas closures\ncom bindings e escopos diferentes.\n Respostas corretas ( NOT true):\nc) Anonymous functions created within object context are always bound to that object.\nd) Assigning closure to a property of an object binds it to that object.",
+    "options": [
+      {
+        "text": "Anonymous functions can be bound to objects.",
+        "correct": false
+      },
+      {
+        "text": "Binding defines the value of $this and the scope for a closure.",
+        "correct": false
+      },
+      {
+        "text": "Anonymous functions created within object context are always bound to that object.",
+        "correct": true
+      },
+      {
+        "text": "Assigning closure to a property of an object binds it to that object.",
+        "correct": true
+      },
+      {
+        "text": "Methods bind() and bindTo() of the Closure object provide means to create\nclosures with different binding and scope.",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q55] Which of these statements about PHP is false?",
+    "explanation": "A final class can be extended.\nd) Properties can be final.\n(a) Verdadeiro → Uma classe pode ter métodos final, e ainda assim pode ser\nestendida. Apenas esses métodos não podem ser sobrescritos.\n• (b) Verdadeiro → Uma classe final pode ser instanciada normalmente, só não\npode ser herdada.\n• (c) Falso → Uma classe final não pode ser estendida, pois sua definição\nimpede herança.\n• (d) Falso → Em PHP não existem propriedades final. Apenas classes e\nmétodos podem ser declarados como final.\n  Respostas falsas:\nc) A final class can be extended.\nd) Properties can be final.",
+    "options": [
+      {
+        "text": "A class with a final function may be extended.",
+        "correct": false
+      },
+      {
+        "text": "A final class may be instantiated.",
+        "correct": false
+      },
+      {
+        "text": "A final class can be extended.",
+        "correct": true
+      },
+      {
+        "text": "Properties can be final.",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q56] What is the preferred method for preventing SQL injection?",
+    "explanation": "a) Correta  → O método mais seguro e recomendado é o uso de prepared statements\n(declarações preparadas) com parâmetros vinculados (bindParam, bindValue). Isso\ngarante que os valores do usuário não sejam interpretados como parte do SQL.\n• b) Incorreta → O uso de escaping específico do banco (como\nmysqli_real_escape_string) é apenas uma mitigação parcial. Pode falhar em\ncasos específicos ou quando esquecido.\n• c) Incorreta → addslashes() não é seguro contra SQL injection, pois não lida\ncorretamente com todos os contextos e encodings.\n• d) Incorreta → htmlspecialchars() serve para prevenir XSS (Cross-Site\nScripting), não SQL injection.\n  Resposta correta:\na) Always using prepared statements for all SQL queries when available.",
+    "options": [
+      {
+        "text": "Always using prepared statements for all SQL queries when available.",
+        "correct": true
+      },
+      {
+        "text": "Always using the available database-specific escaping functionality on all variables prior\nto building the SQL query.",
+        "correct": false
+      },
+      {
+        "text": "Using addslashes() to escape variables to be used in a query.",
+        "correct": false
+      },
+      {
+        "text": "Using htmlspecialchars() and the available database-specific escaping\nfunctionality to escape variables to be used in a query.",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q57] What is the name of the method that can be used to provide read access to virtual\nproperties in a class?",
+    "explanation": "a) __wakeup() → Usado na serialização/unserialization de objetos, não para\npropriedades virtuais.\n• b) __fetch() → Não existe como método mágico no PHP.\n• c) __get()  → É o método mágico usado quando se tenta ler uma\npropriedade inacessível ou inexistente em um objeto. Exemplo:\nclass Test {\n    private $data = ['name' => 'Maycon'];\n\n    public function __get($prop) {\n        return $this->data[$prop] ?? null;\n    }\n}\n$obj = new Test();\necho $obj->name; // \"Maycon\"\n• d) __call() → Trata chamadas de métodos inacessíveis ou inexistentes, não\npropriedades.\n• e) __set() → Usado para escrita em propriedades inacessíveis, não leitura.\n  Resposta correta:\nc) __get()",
+    "options": [
+      {
+        "text": "__wakeup()",
+        "correct": false
+      },
+      {
+        "text": "__fetch()",
+        "correct": false
+      },
+      {
+        "text": "__get()",
+        "correct": true
+      },
+      {
+        "text": "__call()",
+        "correct": false
+      },
+      {
+        "text": "__set()",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q58] What will the following function call print?",
+    "explanation": "O especificador %010.6f significa:\n• %f → formatação de ponto flutuante.\n• .6 → 6 casas decimais.\n• 10 → largura mínima total de 10 caracteres.\n• 0 → preencher com zeros à esquerda se faltar espaço.\n• O número 22 formatado com .6f vira:\n22.000000\n(2 dígitos + ponto + 6 casas decimais = 9 caracteres).\n• Como a largura mínima é 10, falta 1 caractere, então um 0 é adicionado à\nesquerda.\nResultado final:\n022.000000\n  Resposta correta:\nc) 022.000000",
+    "options": [
+      {
+        "text": "22",
+        "correct": false
+      },
+      {
+        "text": "22.000000",
+        "correct": false
+      },
+      {
+        "text": "022.000000",
+        "correct": true
+      },
+      {
+        "text": "22.00\nprintf('%010.6f', 22);",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q59] Given the following, what is the result of running test.php?\nArquivo functions.php:\nArquivo test.php:\n\nfunction oops(string $input)\n{\n    return $input;\n}\ninclude 'functions.php';\nvar_dump(oops(12));",
+    "explanation": "O código tem declare(strict_types=1) no início.\n• Isso significa que o PHP não faz conversão implícita de tipos.\n• O parâmetro oops(string $input) exige uma string.\n2. A chamada oops(12) envia um inteiro (12).\n• Em modo strict types, isso gera um TypeError fatal em tempo de\nexecução.\n• Diferente do modo fraco (sem strict_types), onde o inteiro seria\nconvertido para string \"12\".\n3. Portanto, o script não chega a imprimir nada com var_dump. Ele para com um\nerro.\n  Resposta correta:\na) Fatal error: Uncaught TypeError",
+    "options": [
+      {
+        "text": "Fatal error: Uncaught TypeError",
+        "correct": true
+      },
+      {
+        "text": "string(2) \"12\"",
+        "correct": false
+      },
+      {
+        "text": "Parse error: syntax error, unexpected 'string'",
+        "correct": false
+      },
+      {
+        "text": "Recoverable fatal error\ndeclare(strict_types=1);",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "prompt": "[Q60] Given the following PHP function:\nWhich of the following values for the $s parameter do NOT throw a type error when calling\nthe doSomething() function?\n\nfunction doSomething(?string $s) {\n   // ...\n}",
+    "explanation": "A função aceita um parâmetro ?string, ou seja, string ou null são valores válidos.\n• null  é aceito porque o  ?string permite explicitamente null.\n• \"\"  é uma string válida (string vazia).\n• 'null'  também é uma string válida, já que é apenas o texto  \"null\".\n2. Nenhum desses valores lança TypeError.\n  Resposta correta:\nd) All of the above\nZend PHP Certified Engineer 2025 – By Maycon Douglas",
+    "options": [
+      {
+        "text": "'null'",
+        "correct": false
+      },
+      {
+        "text": "null",
+        "correct": false
+      },
+      {
+        "text": "\"\"",
+        "correct": false
+      },
+      {
+        "text": "All of the above",
+        "correct": true
+      }
+    ]
+  }
+]

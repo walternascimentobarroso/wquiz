@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.db
+.env
+.env.example.bak
+.DS_Store
+php_extract.txt
+backend/scripts/php_seed_raw.json
+*.pyc
+
+# Node
+node_modules/
+dist/
+build/
+*.local
+.vite/
+
+# IDE
+.idea/
+.vscode/
+*.swp
