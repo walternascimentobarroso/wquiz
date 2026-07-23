@@ -1,4 +1,23 @@
 services:
+  db:
+    image: postgres:16-alpine
+    container_name: ${COMPOSE_PROJECT_NAME:-wquiz}-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-wquiz}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-wquiz}
+      POSTGRES_DB: ${POSTGRES_DB:-wquiz}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-wquiz} -d ${POSTGRES_DB:-wquiz}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
+
   backend:
     build:
       context: ./backend
@@ -8,18 +27,19 @@ services:
       - "${API_PORT:-8000}:8000"
     environment:
       SECRET_KEY: ${SECRET_KEY:-wquiz-dev-secret-change-in-production}
-      DATABASE_URL: ${DATABASE_URL:-sqlite:////data/wquiz.db}
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://wquiz:wquiz@db:5432/wquiz}
       ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@example.com}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
       CORS_ORIGINS: ${CORS_ORIGINS:-["http://localhost:5173","http://localhost:5174","http://127.0.0.1:5173","http://127.0.0.1:5174"]}
-    volumes:
-      - backend_data:/data
+    depends_on:
+      db:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
       interval: 15s
       timeout: 5s
       retries: 5
-      start_period: 10s
+      start_period: 15s
     restart: unless-stopped
 
   frontend:
@@ -51,4 +71,4 @@ services:
     restart: unless-stopped
 
 volumes:
-  backend_data:
+  postgres_data:

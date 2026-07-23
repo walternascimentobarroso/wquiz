@@ -17,6 +17,16 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.core.database import Base
 
 
+def _str_enum(enum_cls: type[enum.Enum]) -> Enum:
+    """Store enums as VARCHAR — portable across SQLite and PostgreSQL."""
+    return Enum(
+        enum_cls,
+        values_callable=lambda items: [item.value for item in items],
+        native_enum=False,
+        validate_strings=True,
+    )
+
+
 class UserRole(str, enum.Enum):
     ADMIN = "admin"
     USER = "user"
@@ -47,7 +57,7 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
     hashed_password: Mapped[str] = mapped_column(String(255))
     full_name: Mapped[str] = mapped_column(String(255), default="")
-    role: Mapped[UserRole] = mapped_column(Enum(UserRole), default=UserRole.USER)
+    role: Mapped[UserRole] = mapped_column(_str_enum(UserRole), default=UserRole.USER)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
@@ -141,9 +151,9 @@ class QuizSession(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     quiz_id: Mapped[int] = mapped_column(ForeignKey("quizzes.id"), index=True)
-    mode: Mapped[QuizMode] = mapped_column(Enum(QuizMode))
+    mode: Mapped[QuizMode] = mapped_column(_str_enum(QuizMode))
     status: Mapped[SessionStatus] = mapped_column(
-        Enum(SessionStatus), default=SessionStatus.IN_PROGRESS
+        _str_enum(SessionStatus), default=SessionStatus.IN_PROGRESS
     )
     current_index: Mapped[int] = mapped_column(Integer, default=0)
     score: Mapped[int] = mapped_column(Integer, default=0)
@@ -183,7 +193,7 @@ class FlashcardReview(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     session_id: Mapped[int] = mapped_column(ForeignKey("quiz_sessions.id"), index=True)
     flashcard_id: Mapped[int] = mapped_column(ForeignKey("flashcards.id"))
-    rating: Mapped[FlashcardRating] = mapped_column(Enum(FlashcardRating))
+    rating: Mapped[FlashcardRating] = mapped_column(_str_enum(FlashcardRating))
     ease_factor: Mapped[float] = mapped_column(Float, default=2.5)
     interval_days: Mapped[int] = mapped_column(Integer, default=0)
     reviewed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

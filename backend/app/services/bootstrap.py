@@ -166,46 +166,27 @@ def init_db(*, force_reseed: bool = False) -> None:
 
 
 def _ensure_schema_columns() -> None:
-    """Add new columns on existing SQLite databases."""
+    """Add missing columns on existing databases (SQLite or PostgreSQL)."""
     inspector = inspect(engine)
     table_names = inspector.get_table_names()
 
+    def add_column(table: str, column_sql: str) -> None:
+        with engine.begin() as conn:
+            conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {column_sql}"))
+
     if "quiz_sessions" in table_names:
         columns = {col["name"] for col in inspector.get_columns("quiz_sessions")}
-        with engine.begin() as conn:
-            if "time_limit_minutes" not in columns:
-                conn.execute(
-                    text(
-                        "ALTER TABLE quiz_sessions "
-                        "ADD COLUMN time_limit_minutes INTEGER DEFAULT 120"
-                    )
-                )
-            if "question_ids" not in columns:
-                conn.execute(
-                    text("ALTER TABLE quiz_sessions ADD COLUMN question_ids TEXT")
-                )
+        if "time_limit_minutes" not in columns:
+            add_column("quiz_sessions", "time_limit_minutes INTEGER DEFAULT 120")
+        if "question_ids" not in columns:
+            add_column("quiz_sessions", "question_ids TEXT")
 
     if "session_answers" in table_names:
         columns = {col["name"] for col in inspector.get_columns("session_answers")}
         if "selected_option_ids" not in columns:
-            with engine.begin() as conn:
-                conn.execute(
-                    text(
-                        "ALTER TABLE session_answers "
-                        "ADD COLUMN selected_option_ids TEXT DEFAULT '[]'"
-                    )
-                )
+            add_column("session_answers", "selected_option_ids TEXT DEFAULT '[]'")
 
     if "questions" in table_names:
         columns = {col["name"] for col in inspector.get_columns("questions")}
         if "theme" not in columns:
-            with engine.begin() as conn:
-                conn.execute(
-                    text(
-                        "ALTER TABLE questions "
-                        "ADD COLUMN theme VARCHAR(120) DEFAULT ''"
-                    )
-                )
-
-    # create_all handles new tables; no extra column migration needed for
-    # question_references beyond Base.metadata.create_all above.
+            add_column("questions", "theme VARCHAR(120) DEFAULT ''")
