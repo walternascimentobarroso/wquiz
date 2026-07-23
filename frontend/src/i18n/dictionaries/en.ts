@@ -72,9 +72,25 @@ export const en = {
   result: {
     title: 'Result',
     scoreLine: '{score} of {total} correct',
+    breakdown: '{correct} correct · {wrong} wrong',
+    donutLabel: '{percent}% — {correct} correct, {wrong} wrong',
     timeUsed: 'Time used: {duration}',
     newQuiz: 'New quiz',
+    reviewWrong: 'Review wrong answers',
     calculating: 'Calculating result…',
+    reviewTitle: 'Review',
+    filterLabel: 'Filter answers',
+    filter: {
+      all: 'All',
+      wrong: 'Wrong',
+      correct: 'Correct',
+    },
+    filterEmpty: 'No answers in this filter.',
+    statusCorrect: 'Correct',
+    statusWrong: 'Incorrect',
+    yourAnswer: 'Your answer',
+    correctAnswer: 'Correct answer',
+    explanation: 'Explanation',
   },
 }
 

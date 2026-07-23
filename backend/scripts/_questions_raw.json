@@ -1358,8 +1358,8 @@
     ]
   },
   {
-    "prompt": "[Q60] Given the following PHP function:\nWhich of the following values for the $s parameter do NOT throw a type error when calling\nthe doSomething() function?\n\nfunction doSomething(?string $s) {\n   // ...\n}",
-    "explanation": "A função aceita um parâmetro ?string, ou seja, string ou null são valores válidos.\n• null  é aceito porque o  ?string permite explicitamente null.\n• \"\"  é uma string válida (string vazia).\n• 'null'  também é uma string válida, já que é apenas o texto  \"null\".\n2. Nenhum desses valores lança TypeError.\n  Resposta correta:\nd) All of the above\nZend PHP Certified Engineer 2025 – By Maycon Douglas",
+    "prompt": "[Q60] Given the following PHP function:\nWhich of the following values for the $s parameter do NOT throw a type error when calling the doSomething() function?\n\nfunction doSomething(?string $s) {\n   // ...\n}",
+    "explanation": "A função aceita um parâmetro ?string, ou seja, string ou null são valores válidos.\n• null  é aceito porque o  ?string permite explicitamente null.\n• \"\"  é uma string válida (string vazia).\n• 'null'  também é uma string válida, já que é apenas o texto  \"null\".\n2. Nenhum desses valores lança TypeError.\n  Resposta correta:\nd) All of the above\nZend PHP Certified Engineer 2025",
     "options": [
       {
         "text": "'null'",

@@ -1,4 +1,4 @@
-"""Seed data from Zend PHP Certified Engineer 2025 (Maycon Douglas PDF).
+"""Seed data from Zend PHP Certified Engineer 2025.
 
 Questions keep a theme tag aligned with official Zend exam topics:
 https://www.zend.com/training/php-certification-exam
@@ -10,8 +10,8 @@ from __future__ import annotations
 
 SAMPLE_QUIZ_TITLE = "Zend PHP Certified Engineer 2025"
 SAMPLE_QUIZ_DESCRIPTION = (
-    "Practice quiz based on Zend PHP Certified Engineer 2025 material "
-    "(Maycon Douglas). In study mode you can filter by topic or practice all."
+    "Practice quiz based on Zend PHP Certified Engineer 2025 material. "
+    "In study mode you can filter by topic or practice all."
 )
 SAMPLE_QUIZ_CATEGORY = "Zend PHP"
 
@@ -134,7 +134,7 @@ QUESTIONS_DATA: list[dict] = [
         ],
     },
     {
-        "prompt": '[Q2] Given the following code:\nWhich expression may be used instead of the *** placeholder to log an "Info" message?\n\n```php\nnamespace PHP;\nenum Category {\n    case Info;\n    case Warning;\n    case Error;\n};\nfunction log(string $message, Category $category) {\n    echo "$message {$category->name}";\n}\nlog("My message", ***);\n```',
+        "prompt": '[Q2] Given the following code, which expression may be used instead of the *** placeholder to log an "Info" message?\n\n```php\nnamespace PHP;\nenum Category {\n    case Info;\n    case Warning;\n    case Error;\n};\nfunction log(string $message, Category $category) {\n    echo "$message {$category->name}";\n}\nlog("My message", ***);\n```',
         "explanation": "In PHP 8.1+, enum cases are accessed with the scope resolution operator (::).\nCategory::Info is the correct way to pass that enum case.\n(a) Category['Info'] is invalid — enums are not arrays.\n(b) Category.Info is JavaScript-style, not PHP.\n(d) Category->Info uses object property access, not enum case access.\nCorrect answer: Category::Info.",
         "options": [
             ("Category['Info']", False),
@@ -246,13 +246,13 @@ QUESTIONS_DATA: list[dict] = [
         ],
     },
     {
-        "prompt": '[Q10] Which regular expression will match each of these strings?',
-        "explanation": 'The phone-number samples use different separators (parentheses, space, hyphen, dot).\nA pattern like /^(\\d{3}).\\d{3}.\\d{4}$/ matches three digits, any single separator character, three digits, separator, then four digits.\nPatterns that allow arbitrary prefixes with .* are too loose.\nCorrect answer: /^(\\d{3}).\\d{3}.\\d{4}$/.',
+        "prompt": '[Q10] Which regular expression will match each of these strings?\n\n```text\n(000) 555-1234\n000 555 1234\n000-555-1234\n000.555.1234\n```',
+        "explanation": "The samples use optional parentheses around the area code and different single-character separators (space, hyphen, or dot).\nOnly /^\\(?\\d{3}\\)?[.\\-\\s]\\d{3}[.\\-\\s]\\d{4}$/ matches all four forms.\nPatterns that require digits without optional parentheses miss '(000) 555-1234'.\nPatterns that force parentheses miss the other three.\nCorrect answer: /^\\(?\\d{3}\\)?[.\\-\\s]\\d{3}[.\\-\\s]\\d{4}$/.",
         "options": [
             ('/^.*\\d{3}.\\d{3}.\\d{4}$/', False),
-            ('/^(\\d{3}).\\d{3}.\\d{4}$/', False),
-            ('/^.*(\\d{3}.\\d{3}.\\d{4})$/', False),
-            ('/^(\\d{3}).\\d{3}.\\d{4}$/\n(000) 555-1234\n000 555 1234\n000-555-1234\n000.555.1234', True),
+            ('/^\\(\\d{3}\\)[.\\-\\s]\\d{3}[.\\-\\s]\\d{4}$/', False),
+            ('/^\\d{3}[.\\-\\s]\\d{3}[.\\-\\s]\\d{4}$/', False),
+            ('/^\\(?\\d{3}\\)?[.\\-\\s]\\d{3}[.\\-\\s]\\d{4}$/', True),
         ],
         "references": [
             {"url": 'https://www.php.net/manual/en/reference.pcre.pattern.syntax.php', "label": 'PCRE pattern syntax'},
@@ -414,11 +414,11 @@ QUESTIONS_DATA: list[dict] = [
     },
     {
         "prompt": '[Q22] What purpose do namespaces fulfill?',
-        "explanation": 'Namespaces organize symbols and avoid name collisions; they are not an alternative to classes and do not inherently improve performance.\nCorrect answer: the option describing namespace purpose as organizing code / avoiding collisions.',
+        "explanation": 'Namespaces organize symbols (classes, functions, constants) and avoid name collisions between libraries.\nThey are not an alternative to classes and do not improve performance by themselves.\nCorrect answer: Organizing code and avoiding name collisions.',
         "options": [
             ('Alternative to classes.', False),
             ('Improved performance.', False),
-            ('Encapsulation.', True),
+            ('Organizing code and avoiding name collisions.', True),
             ('All of the above.', False),
         ],
         "references": [
@@ -427,7 +427,7 @@ QUESTIONS_DATA: list[dict] = [
     },
     {
         "prompt": '[Q23] What is the output of the following code?\n\n```php\n$text = \'This is text\';\n$text1 = <<<TEXT\n$text\nTEXT;\n$text2 = <<<TEXT\n$text1\nTEXT;\necho "$text2";\n```',
-        "explanation": 'Heredoc interpolates variables.\n$text1 becomes \'This is text\'.\n$text2 interpolates $text1, so it also becomes \'This is text\'.\necho "$text1 $text2" prints: This is text This is text.',
+        "explanation": 'Heredoc interpolates variables.\n$text1 becomes \'This is text\'.\n$text2 interpolates $text1, so it also becomes \'This is text\'.\necho "$text2" therefore prints: This is text.',
         "options": [
             ('$text2', False),
             ('$text1', False),
@@ -453,12 +453,12 @@ QUESTIONS_DATA: list[dict] = [
         ],
     },
     {
-        "prompt": '[Q25] Which of these code snippets DO NOT write the exact content of the file source.txt to target.txt? (Choose 3)',
-        "explanation": '(a) and (e) correctly copy file contents via file_get_contents().\n(b) file() keeps trailing newlines; joining with "\\n" adds extra newlines.\n(c) fopen() returns a resource, not the file contents string.\n(d) readfile() echoes content to output and returns an int (byte count), so target.txt gets a number — not the file contents.\nCorrect answers: (b), (c), and (d).',
+        "prompt": '[Q25] Which of these code snippets DO NOT write the exact content of the file source.txt to target.txt? (Choose 2)',
+        "explanation": '(a) and (e) correctly copy the file via file_get_contents().\n(b) file() keeps trailing newlines; joining with "\\n" inserts extra newlines, so the copy is not exact.\n(c) file_put_contents() accepts a stream resource and copies remaining bytes (like stream_copy_to_stream()), so this DOES write the content.\n(d) readfile() echoes to output and returns an int (byte count); that integer is what gets written to target.txt.\nCorrect answers: (b) and (d).',
         "options": [
             ('$handle = fopen("target.txt", "w+");\nfwrite($handle, file_get_contents("source.txt"));\nfclose($handle);', False),
             ('file_put_contents("target.txt", join(file("source.txt"), "\\n"));', True),
-            ('file_put_contents("target.txt", fopen("source.txt", "r"));', True),
+            ('file_put_contents("target.txt", fopen("source.txt", "r"));', False),
             ('file_put_contents("target.txt", readfile("source.txt"));', True),
             ('file_put_contents("target.txt", file_get_contents("source.txt"));', False),
         ],
@@ -469,11 +469,11 @@ QUESTIONS_DATA: list[dict] = [
         ],
     },
     {
-        "prompt": '[Q26] Is the following code vulnerable to SQL Injection?\n\n```php\n// assume $pdo is a valid PDO connection\n$age  = $pdo->quote((int) $age);\n$name = $pdo->quote($name);\n$query = "SELECT * FROM users WHERE name LIKE\n\'$name\' AND age = $age";\n$result = $pdo->query($query);\n```',
-        "explanation": 'Both values are escaped with PDO::quote(), and $age is cast to int first.\nThis specific snippet is protected from classic SQL injection, though prepared statements are still preferred.\nCorrect answer: No, the code is fully protected from SQL Injection.',
+        "prompt": '[Q26] Is the following code vulnerable to SQL Injection?\n\n```php\n// assume $pdo is a valid PDO connection\n$age  = $pdo->quote((int) $age);\n$name = $pdo->quote($name);\n$query = "SELECT * FROM users WHERE name LIKE $name AND age = $age";\n$result = $pdo->query($query);\n```',
+        "explanation": 'PDO::quote() returns a correctly quoted/escaped SQL string literal, and $age is cast to int before quoting.\nWith those values interpolated (without wrapping quote() results in extra quotes), this snippet is protected from classic SQL injection.\nPrepared statements are still the preferred approach.\nCorrect answer: No, the code is fully protected from SQL Injection.',
         "options": [
             ('Yes, because the $name variable is improperly escaped.', False),
-            ('Yes, because even though $age and $name are escaped, nothing prevents their\ncontents from modifying the SQL.', False),
+            ('Yes, because even though $age and $name are escaped, nothing prevents their contents from modifying the SQL.', False),
             ('Yes, because the $age variable is improperly escaped.', False),
             ('No, the code is fully protected from SQL Injection.', True),
             ('Yes, because you cannot prevent SQL Injection when using PDO.', False),
@@ -514,11 +514,11 @@ QUESTIONS_DATA: list[dict] = [
     },
     {
         "prompt": '[Q29] What is the output of the following code?\n\n```php\necho "22" + "0.2", 23 . 1;\n```',
-        "explanation": '"22" + "0.2" uses numeric addition → 22.2.\n23 . 1 concatenates as strings → \'231\'.\nWith comma in echo, output is 22.2,231.',
+        "explanation": '"22" + "0.2" uses numeric addition → 22.2.\n23 . 1 concatenates as strings → \'231\'.\necho with a comma prints arguments one after another with no separator, so the output is 22.2231 (not 22.2,231).',
         "options": [
             ('56.2', False),
-            ('22.2,231', True),
-            ('22.2231', False),
+            ('22.2,231', False),
+            ('22.2231', True),
             ('220.2231', False),
         ],
         "references": [
@@ -608,13 +608,13 @@ QUESTIONS_DATA: list[dict] = [
         ],
     },
     {
-        "prompt": '[Q36] The class Person should have the two protected properties lastName and\nfirstName. The class should allow setting both properties upon object instantiation. You\nwant to write as little code as possible to achieve this.\nWhich of the following approaches satisfies these requirements?\n\n```php\nparent::__construct();\n    }\n}\nclass Person {\n    public function __construct($firstName, $lastName) {\n        $this->firstName = $firstName;\n        $this->lastName = $lastName;\n    }\n}\nclass Person {\n    public function __construct(protected string $firstName,\nprotected string  $lastName) {\n    }\n}\nclass Person {\n    public function __construct(protected $firstName: string,\nprotected $lastName: string) {\n    }\n}\n```',
-        "explanation": 'Constructor property promotion (PHP 8+) declares and initializes protected properties with minimal code.\nCorrect answer: the promoted-constructor approach.',
+        "prompt": '[Q36] The class Person should have the two protected properties lastName and firstName. The class should allow setting both properties upon object instantiation. You want to write as little code as possible to achieve this.\nWhich of the following approaches satisfies these requirements?',
+        "explanation": 'Constructor property promotion (PHP 8+) declares, types, and initializes protected properties in one short constructor signature.\nManual properties + assignments work but are more code.\nTypeScript-style `protected $name: string` is invalid PHP.\nPublic properties violate the protected requirement.\nCorrect answer: the promoted `protected string` constructor.',
         "options": [
-            ('protected $firstName;', False),
-            ('protected $lastName;', False),
-            ('public function __construct($firstName, $lastName) {', True),
-            ('class Person {', False),
+            ('class Person {\n    protected $firstName;\n    protected $lastName;\n    public function __construct($firstName, $lastName) {\n        $this->firstName = $firstName;\n        $this->lastName = $lastName;\n    }\n}', False),
+            ('class Person {\n    public function __construct(\n        protected string $firstName,\n        protected string $lastName\n    ) {\n    }\n}', True),
+            ('class Person {\n    public function __construct(\n        protected $firstName: string,\n        protected $lastName: string\n    ) {\n    }\n}', False),
+            ('class Person {\n    public string $firstName;\n    public string $lastName;\n    public function __construct($firstName, $lastName) {\n        $this->firstName = $firstName;\n        $this->lastName = $lastName;\n    }\n}', False),
         ],
         "references": [
             {"url": 'https://www.php.net/manual/en/language.oop5.decon.php#language.oop5.decon.constructor.promotion', "label": 'Constructor property promotion'},
@@ -636,7 +636,7 @@ QUESTIONS_DATA: list[dict] = [
     },
     {
         "prompt": "[Q38] What is the output of the following code?\n\n```php\nclass Bar {\n    private $a = 'b';\n    public $c = 'd';\n}\n$x = (array) new Bar();\necho array_key_exists('a', $x) ? 'true' : 'false';\necho '-';\necho array_key_exists('c', $x) ? 'true' : 'false';\n```",
-        "explanation": 'Casting an object to array exposes public properties by name.\nPrivate properties become keys like "\\0Class\\0prop".\narray_keys() therefore includes the mangled private key and the public one.',
+        "explanation": 'Casting an object to array exposes public properties under their plain names (so \'c\' exists).\nPrivate properties become mangled keys like "\\0Bar\\0a", so array_key_exists(\'a\', $x) is false.\nOutput: false-true.',
         "options": [
             ('true-false', False),
             ('false-true', True),
@@ -676,7 +676,7 @@ QUESTIONS_DATA: list[dict] = [
         ],
     },
     {
-        "prompt": "[Q41] What is the output of the following code?\n\n```html\n<?php\ndeclare(strict_types=1);\nfunction add (int $a, int $b) {\n    return $a + $b;\n}\ntry {\n    echo add(1, 2.0);\n} catch (Exception $ex) {\n    echo 'Exception';\n} catch (Error $err) {\n    echo 'Error';\n} catch (Throwable $e) {\n    echo 'Throwable';\n}\n```",
+        "prompt": "[Q41] What is the output of the following code?\n\n```php\n<?php\ndeclare(strict_types=1);\nfunction add (int $a, int $b) {\n    return $a + $b;\n}\ntry {\n    echo add(1, 2.0);\n} catch (Exception $ex) {\n    echo 'Exception';\n} catch (Error $err) {\n    echo 'Error';\n} catch (Throwable $e) {\n    echo 'Throwable';\n}\n```",
         "explanation": 'With declare(strict_types=1), float 2.0 is not accepted for int $b.\nThat raises TypeError, which is caught by catch (Error $err).\nOutput: Error.',
         "options": [
             ('Exception', False),
@@ -691,11 +691,11 @@ QUESTIONS_DATA: list[dict] = [
     },
     {
         "prompt": '[Q42] What is the purpose of the never return type?',
-        "explanation": 'never means the function never returns normally (always throws or exits).\nCorrect answer: It indicates that a function will never return a value.',
+        "explanation": 'never means the function never returns normally — it must throw, exit, or otherwise terminate the request.\nThat is stricter than void (which returns null / no value but still returns).\nCorrect answer: the function never returns normally (always throws or exits).',
         "options": [
-            ('It indicates that there will never be a type restriction on the value that the function\nreturns.', False),
+            ('It indicates that there will never be a type restriction on the value that the function returns.', False),
             ('It indicates that a variable will never have a value.', False),
-            ('It indicates that a function will never return a value.', True),
+            ('It indicates that a function never returns normally (it always throws or exits).', True),
             ('It indicates that a function will never be run.', False),
         ],
         "references": [
@@ -703,13 +703,13 @@ QUESTIONS_DATA: list[dict] = [
         ],
     },
     {
-        "prompt": '[Q43] Given a PHP value, which of these code samples shows how to convert the value to\nJSON?\n\n```php\n$string = $value->__toJson();\n$string = json_encode($value);\n```',
-        "explanation": 'The native way to convert a PHP value to JSON is json_encode($value).\nCorrect answer: json_encode(...).',
+        "prompt": '[Q43] Given a PHP value, which of these code samples shows how to convert the value to JSON?',
+        "explanation": 'The standard PHP API is json_encode($value).\nThere is no built-in Json class, __toJson() method, or Json::encode() helper in core PHP.\nCorrect answer: $string = json_encode($value);',
         "options": [
             ('$json = new Json($value);', False),
-            ('$string = $json->__toString();', False),
-            ('$value = (object) $value;', False),
-            ('$string = Json::encode($value);', True),
+            ('$string = $value->__toJson();', False),
+            ('$string = Json::encode($value);', False),
+            ('$string = json_encode($value);', True),
         ],
         "references": [
             {"url": 'https://www.php.net/manual/en/function.json-encode.php', "label": 'json_encode'},
@@ -731,12 +731,12 @@ QUESTIONS_DATA: list[dict] = [
     },
     {
         "prompt": '[Q45] Consider the following table data and PHP code. What is the outcome?\n\nTable data (table name "users" with primary key "id"):\n\n```text\nid  name   email\n1   anna   alpha@example.com\n2   betty  beta@example.org\n3   clara  gamma@example.net\n5   sue    sigma@example.info\n```\n\nPHP code (assume the PDO connection is correctly established):\n\n```php\n$dsn  = \'mysql:host=localhost;dbname=exam\';\n$user = \'username\';\n$pass = \'********\';\n$pdo  = new PDO($dsn, $user, $pass);\ntry {\n    $cmd  = "INSERT INTO users (id, name, email) VALUES\n(:id, :name, :email)";\n    $stmt = $pdo->prepare($cmd);\n    $stmt->bindValue(\':id\', 1);\n    $stmt->bindValue(\':name\', \'anna\');\n    $stmt->bindValue(\':email\', \'alpha@example.com\');\n    $stmt->execute();\n    echo "Success!";\n} catch (PDOException $e) {\n    echo "Failure!";\n    throw $e;\n}\n```',
-        "explanation": 'The table already has id=1, so INSERT id=1 fails with a primary key violation.\nPDO defaults to ERRMODE_SILENT: execute() returns false and does not throw.\nThe catch block never runs, so the script still prints "Success!".\nCorrect answer: PK violation + "Success!" message.',
+        "explanation": 'The table already has id=1, so INSERT id=1 fails with a primary key violation.\nAs of PHP 8.0, PDO defaults to ERRMODE_EXCEPTION, so execute() throws PDOException.\nThe catch block runs and prints "Failure!" (then rethrows).\nCorrect answer: PK violation + "Failure!" message.',
         "options": [
-            ('The INSERT will fail because of a primary key violation, and the user will see the "Success!" message.', True),
+            ('The INSERT will fail because of a primary key violation, and the user will see the "Success!" message.', False),
             ('The INSERT will succeed and the user will see the "Success!" message.', False),
             ('The INSERT will fail because of a primary key violation, and the user will see a PDO warning message.', False),
-            ('The INSERT will fail because of a primary key violation, and the user will see the "Failure!" message.', False),
+            ('The INSERT will fail because of a primary key violation, and the user will see the "Failure!" message.', True),
         ],
         "references": [
             {"url": 'https://www.php.net/manual/en/pdo.error-handling.php', "label": 'PDO error handling'},
@@ -858,7 +858,7 @@ QUESTIONS_DATA: list[dict] = [
     },
     {
         "prompt": '[Q54] Which of the following statements about anonymous functions in PHP are NOT true?\n(Choose 2)',
-        "explanation": 'Statements that are NOT true:\nAnonymous functions created in object context are not automatically bound.\nAssigning a Closure to an object property does not bind it by itself.\nCorrect answers: those two false statements.',
+        "explanation": 'Statements that are NOT true:\n(c) Not always: a static anonymous function created in object context is not bound to $this.\n(d) Assigning a Closure to an object property does not bind it by itself — use bindTo()/Closure::bind().\nNon-static closures created inside a method are auto-bound, and bind()/bindTo() exist for rebinding.\nCorrect answers: (c) and (d).',
         "options": [
             ('Anonymous functions can be bound to objects.', False),
             ('Binding defines the value of $this and the scope for a closure.', False),
@@ -873,7 +873,7 @@ QUESTIONS_DATA: list[dict] = [
     },
     {
         "prompt": '[Q55] Which of these statements about PHP is false? (Choose 2)',
-        "explanation": 'False statements:\nA final class cannot be extended.\nPHP does not allow multiple inheritance of classes (a class may extend only one parent).\nNote: since PHP 8.4, properties can be final — so that is no longer a false statement.\nCorrect answers: (c) and (d).',
+        "explanation": 'False statements:\nA final class cannot be extended.\nPHP does not allow multiple inheritance of classes (a class may extend only one parent).\nA class with a final method may still be extended, and a final class may be instantiated.\nCorrect answers: (c) and (d).',
         "options": [
             ('A class with a final function may be extended.', False),
             ('A final class may be instantiated.', False),
@@ -928,13 +928,13 @@ QUESTIONS_DATA: list[dict] = [
         ],
     },
     {
-        "prompt": "[Q59] Given the following, what is the result of running test.php?\nArquivo functions.php:\nArquivo test.php:\n\n```php\nfunction oops(string $input)\n{\n    return $input;\n}\ninclude 'functions.php';\nvar_dump(oops(12));\n```",
-        "explanation": 'With strict_types=1, oops(12) passes an int to string and raises TypeError.\nCorrect answer: Fatal error: Uncaught TypeError.',
+        "prompt": "[Q59] Given the following, what is the result of running test.php?\n\nfunctions.php:\n\n```php\n<?php\nfunction oops(string $input)\n{\n    return $input;\n}\n```\n\ntest.php:\n\n```php\n<?php\ndeclare(strict_types=1);\ninclude 'functions.php';\nvar_dump(oops(12));\n```",
+        "explanation": 'strict_types=1 in test.php applies to function calls made from that file.\noops(12) therefore passes an int where string is required and raises TypeError.\nCorrect answer: Fatal error: Uncaught TypeError.',
         "options": [
             ('Fatal error: Uncaught TypeError', True),
             ('string(2) "12"', False),
             ("Parse error: syntax error, unexpected 'string'", False),
-            ('Recoverable fatal error\ndeclare(strict_types=1);', False),
+            ('Recoverable fatal error', False),
         ],
         "references": [
             {"url": 'https://www.php.net/manual/en/language.types.declarations.php#language.types.declarations.strict', "label": 'Strict typing'},
@@ -942,7 +942,7 @@ QUESTIONS_DATA: list[dict] = [
         ],
     },
     {
-        "prompt": '[Q60] Given the following PHP function:\nWhich of the following values for the $s parameter do NOT throw a type error when calling\nthe doSomething() function?\n\n```php\nfunction doSomething(?string $s) {\n   // ...\n}\n```',
+        "prompt": '[Q60] Given the following PHP function:\nWhich of the following values for the $s parameter do NOT throw a type error when calling the doSomething() function?\n\n```php\nfunction doSomething(?string $s) {\n   // ...\n}\n```',
         "explanation": "?string accepts null, '' and 'null' without a TypeError.\nCorrect answer: All of the above.",
         "options": [
             ("'null'", False),

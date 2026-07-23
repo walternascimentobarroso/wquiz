@@ -351,11 +351,6 @@ select {
   align-items: start;
 }
 
-.review-explanation {
-  white-space: pre-wrap;
-  margin-top: 0.55rem;
-}
-
 .options {
   display: grid;
   gap: 0.7rem;
@@ -605,6 +600,175 @@ select {
   line-height: 1;
 }
 
+.score-donut {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  margin: 0.35rem auto 0.85rem;
+}
+
+.score-donut-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.score-donut-track {
+  stroke: rgba(255, 255, 255, 0.08);
+}
+
+.score-donut-arc {
+  stroke: var(--ok);
+  transition: stroke-dashoffset 0.85s ease, stroke 0.35s ease;
+}
+
+.score-donut.score-tone-high .score-donut-arc {
+  stroke: var(--ok);
+}
+
+.score-donut.score-tone-mid .score-donut-arc {
+  stroke: var(--warn);
+}
+
+.score-donut.score-tone-low .score-donut-arc {
+  stroke: var(--danger);
+}
+
+.score-donut-center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 0.2rem;
+  pointer-events: none;
+}
+
+.score-donut-percent {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 6vw, 2.85rem);
+  font-weight: 650;
+  line-height: 1;
+  color: var(--ok);
+}
+
+.score-donut.score-tone-high .score-donut-percent {
+  color: var(--ok);
+}
+
+.score-donut.score-tone-mid .score-donut-percent {
+  color: var(--warn);
+}
+
+.score-donut.score-tone-low .score-donut-percent {
+  color: var(--danger);
+}
+
+.score-donut-legend {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+.score-donut-legend .ok-dot,
+.score-donut-legend .bad-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+}
+
+.score-donut-legend .ok-dot {
+  background: var(--ok);
+}
+
+.score-donut-legend .bad-dot {
+  background: var(--danger);
+}
+
+.score-donut-legend .legend-sep {
+  opacity: 0.55;
+}
+
+.score-hero .big.score-tone-high {
+  color: var(--ok);
+}
+
+.score-hero .big.score-tone-mid {
+  color: var(--warn);
+}
+
+.score-hero .big.score-tone-low {
+  color: var(--danger);
+}
+
+.score-breakdown {
+  margin: 0.35rem 0 0;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.result-actions {
+  justify-content: center;
+}
+
+.review-section {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.review-toolbar {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.review-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 650;
+}
+
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.92rem;
+}
+
+.filter-chip:hover {
+  border-color: rgba(232, 242, 236, 0.28);
+  color: var(--ink);
+}
+
+.filter-chip.active {
+  border-color: rgba(62, 207, 142, 0.45);
+  background: rgba(62, 207, 142, 0.12);
+  color: var(--ink);
+}
+
+.filter-count {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.82rem;
+  opacity: 0.85;
+}
+
 .review-list {
   display: grid;
   gap: 0.85rem;
@@ -615,6 +779,104 @@ select {
   border-radius: 12px;
   border: 1px solid var(--border);
   background: rgba(0, 0, 0, 0.15);
+}
+
+.review-item.is-correct {
+  border-color: rgba(62, 207, 142, 0.35);
+  background: rgba(62, 207, 142, 0.06);
+}
+
+.review-item.is-wrong {
+  border-color: rgba(232, 106, 92, 0.4);
+  background: rgba(232, 106, 92, 0.07);
+}
+
+.status-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1;
+  flex: 0 0 auto;
+}
+
+.status-icon.ok {
+  color: var(--ok);
+  background: rgba(62, 207, 142, 0.16);
+}
+
+.status-icon.bad {
+  color: var(--danger);
+  background: rgba(232, 106, 92, 0.16);
+}
+
+.review-answers {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 0.85rem;
+}
+
+.review-answer-line {
+  margin: 0;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.review-answer-label {
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.review-answer-text {
+  white-space: pre-wrap;
+  color: var(--ink);
+  font-size: 0.98rem;
+  line-height: 1.45;
+}
+
+.review-answer-line.ok-line .review-answer-text {
+  color: #c8f0d8;
+}
+
+.review-answer-line.bad-line .review-answer-text {
+  color: #f3c4bf;
+}
+
+.review-explanation {
+  margin-top: 0.85rem;
+}
+
+.review-explanation summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-weight: 600;
+  list-style: none;
+}
+
+.review-explanation summary::-webkit-details-marker {
+  display: none;
+}
+
+.review-explanation summary::before {
+  content: '▸ ';
+  color: var(--accent);
+}
+
+.review-explanation[open] summary::before {
+  content: '▾ ';
+}
+
+.review-explanation p {
+  margin: 0.55rem 0 0;
+  white-space: pre-wrap;
+  color: var(--ink);
+  line-height: 1.5;
 }
 
 .error {

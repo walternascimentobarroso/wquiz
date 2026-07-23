@@ -738,7 +738,7 @@ def main() -> None:
             assert "✓" not in item["prompt"], i
             assert all("✓" not in t for t, _ in item["options"]), i
 
-    header = '''"""Seed data from Zend PHP Certified Engineer 2025 (Maycon Douglas PDF).
+    header = '''"""Seed data from Zend PHP Certified Engineer 2025.
 
 Questions keep a theme tag aligned with official Zend exam topics:
 https://www.zend.com/training/php-certification-exam
@@ -750,8 +750,8 @@ from __future__ import annotations
 
 SAMPLE_QUIZ_TITLE = "Zend PHP Certified Engineer 2025"
 SAMPLE_QUIZ_DESCRIPTION = (
-    "Practice quiz based on Zend PHP Certified Engineer 2025 material "
-    "(Maycon Douglas). In study mode you can filter by topic or practice all."
+    "Practice quiz based on Zend PHP Certified Engineer 2025 material. "
+    "In study mode you can filter by topic or practice all."
 )
 SAMPLE_QUIZ_CATEGORY = "Zend PHP"
 

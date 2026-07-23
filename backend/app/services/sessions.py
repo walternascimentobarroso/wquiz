@@ -193,6 +193,19 @@ def _correct_option_ids(question: Question) -> list[int]:
     ]
 
 
+def _options_by_ids(question: Question | None, option_ids: list[int]) -> list[dict]:
+    if question is None or not option_ids:
+        return []
+    by_id = {opt.id: opt for opt in question.options}
+    payload: list[dict] = []
+    for option_id in option_ids:
+        option = by_id.get(option_id)
+        if option is None:
+            continue
+        payload.append({"id": option.id, "text": option.text})
+    return payload
+
+
 def submit_answer(
     db: Session,
     session: QuizSession,
@@ -525,8 +538,10 @@ def build_result(db: Session, session: QuizSession) -> dict:
                 "prompt": question.prompt if question else "",
                 "selected_option_id": selected_ids[0] if selected_ids else answer.option_id,
                 "selected_option_ids": selected_ids,
+                "selected_options": _options_by_ids(question, selected_ids),
                 "correct_option_id": correct_ids[0] if correct_ids else None,
                 "correct_option_ids": correct_ids,
+                "correct_options": _options_by_ids(question, correct_ids),
                 "is_correct": answer.is_correct,
                 "is_multi": len(correct_ids) > 1,
                 "explanation": question.explanation if question else "",
